@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import styles from './app.css';
 
 // TODO: split source files and import
 const Config = {
@@ -16,11 +17,11 @@ class SuggestionsRoot extends React.Component<Props> {
   render() {
     return (
       <div>
-        <h1 class="heading">{Config.heading}</h1>
+        <h1 className={styles.heading}>{Config.heading}</h1>
       </div>
     );
   }
 }
 
-const root = document.getElementById('#root');
-ReactDOM.render(SuggestionsRoot, root);
+const root = createRoot(document.getElementById('root'));
+root.render(<SuggestionsRoot/>);

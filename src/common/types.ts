@@ -9,3 +9,10 @@ export type EntryData = {
 export function getEntryTimeElapsed(entry: EntryData) {
   return '12 days';
 }
+
+export type CommentData = {
+  id: number;
+  author: string;
+  timestamp: number;
+  comment: string;
+};

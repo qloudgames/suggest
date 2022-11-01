@@ -35,8 +35,8 @@
 }
 @media (max-width: 981px) {
   .vote {
-    left: 0;
-    margin-right: 20px;
+    left: 15px;
+    margin-right: 45px;
   }
   .vote > *:not(:last-child) {
     margin-bottom: 5px;
@@ -47,6 +47,7 @@
 }
 
 .description {
+  cursor: pointer;
   margin-bottom: 40px;
 }
 @media (max-width: 981px) {

@@ -5,6 +5,13 @@
   cursor: default;
 }
 
+.loadContainer {
+  text-align: center;
+}
+.load {
+  margin-top: 15px;
+}
+
 .header {
   text-align: center;
   margin-bottom: 25px;

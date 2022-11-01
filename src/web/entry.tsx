@@ -5,23 +5,37 @@ import { EntryData, getEntryTimeElapsed } from 'common/types';
 import { InlineSeparator, StyledLink } from './component_util';
 import { Vote, VoteState } from './vote';
 import * as classNames from 'classnames';
+import { ApiService } from './services/api_service';
 
 type Props = {
   entry: EntryData;
+  apiService: ApiService,
   compact?: boolean;
   enableLinks?: boolean;
 }
 
-export const Entry = ({ entry, compact = true, enableLinks }: Props) => {
+export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props) => {
   //
-  const [voteState, setVoted] = React.useState<VoteState>(undefined);
-  const onLike = () => setVoted(voteState !== 'liked' ? 'liked' : undefined);
-  const onDislike = () => setVoted(voteState !== 'disliked' ? 'disliked' : undefined);
+  const [voteState, setVoted] = React.useState<VoteState>(entry.voteState);
+  const onLike = () => {
+    setVoted(voteState !== 'like' ? 'like' : undefined);
+    apiService.voteOnEntry({
+      id: entry.id,
+      voteAction: voteState !== 'like' ? 'like' : 'clear',
+    });
+  };
+  const onDislike = () => {
+    setVoted(voteState !== 'dislike' ? 'dislike' : undefined);
+    apiService.voteOnEntry({
+      id: entry.id,
+      voteAction: voteState !== 'dislike' ? 'dislike' : 'clear',
+    });
+  };
 
   return (
     <Card.Grid key={entry.id} title={entry.title} className={classNames(styles.entry, { [styles.compact]: compact })}>
 
-      <Vote state={voteState} voteCount={17} onLike={onLike} onDislike={onDislike}/>
+      <Vote state={voteState} voteCount={entry.voteCount} onLike={onLike} onDislike={onDislike}/>
 
       {/* Main area */}
       <div className={styles.entryContent}>
@@ -51,13 +65,11 @@ function createEntryDescription(entry: EntryData, compact: boolean) {
     return entry.description;
   }
 
-  // split into excert, and "read more..."
+  // split into excerpt, and "read more..."
   return (
     <>
       <>{entry.description.substring(0, 201)}...</>
-      <StyledLink to={`/details/${entry.id}`} enabled={true}>
-        <span className={styles.readMore}>[read more]</span>
-      </StyledLink>
+      <span className={styles.readMore}>[read more]</span>
     </>
   )
 }

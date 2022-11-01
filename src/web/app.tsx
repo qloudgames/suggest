@@ -94,7 +94,6 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
     const { apiService } = this.props;
     apiService.getEntries().then(entries => {
       this.setState({ entries });
-      console.log('set entries = ' + JSON.stringify(entries));
     });
   };
 

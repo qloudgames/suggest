@@ -6,12 +6,11 @@ import { FakeEntries } from 'common/fakes/fake_entries';
 import { Entry } from './entry';
 import { getFakeCommentsFor } from 'common/fakes/fake_comments';
 import { Vote } from './vote';
+import { Back } from './app';
 
 export const Details = () => {
   const { entryId }= useParams();
   // TODO: fetch comments from API
-
-  let navigate = useNavigate();
 
   const index = Number.parseInt(entryId);
   const entry = FakeEntries[index];
@@ -21,6 +20,8 @@ export const Details = () => {
 
   return (
     <div className={styles.details}>
+
+      <Back/>
 
       <Entry entry={entry} enableLinks={false}/>
 

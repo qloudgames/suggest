@@ -35,9 +35,9 @@ class SuggestionsRoot extends React.Component<Props> {
             
           <Routes>
             <Route path="/" element={FakeEntries.map(entry => (
-                <Entry entry={entry}/>
+                <Entry key={entry.id} entry={entry} enableLinks={true}/>
               ))} />
-            <Route path="details" element={<Details/>} />
+            <Route path="details/:entryId" element={<Details/>} />
           </Routes>
 
           </Card>

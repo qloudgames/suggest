@@ -6,9 +6,10 @@ import { InlineSeparator, StyledLink } from './component_util';
 
 type Props = {
   entry: EntryData;
+  enableLinks?: boolean;
 }
 
-export const Entry = ({ entry }: Props) => {
+export const Entry = ({ entry, enableLinks }: Props) => {
   //
   const [voted, setVoted] = React.useState<string>('');
   const onLike = () => setVoted(voted !== 'like' ? 'like' : '');
@@ -49,14 +50,22 @@ export const Entry = ({ entry }: Props) => {
         {/* Main area */}
         <div className={styles.entryContent}>
           <div className={styles.description}>
-            <StyledLink to="/details">
-              {entry.description}
-            </StyledLink>
+            {enableLinks ? (
+              <StyledLink to={`/details/${entry.id}`}>
+                {entry.description}
+              </StyledLink>
+            ) : (
+              entry.description
+            )}
           </div>
           <div className={styles.metadata}>
             By {entry.author}, {getEntryTimeElapsed(entry)} ago
             <InlineSeparator/>
-            <StyledLink to="/details">3 comments</StyledLink>
+            {enableLinks ? (
+              <StyledLink to={`/details/${entry.id}`}>3 comments</StyledLink>
+            ) : (
+              '3 comments'
+            )}
           </div>
         </div>
 

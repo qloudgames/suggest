@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/web/app.tsx',
+  devServer: {
+    historyApiFallback: true,
+  },
   module: {
     rules: [
       {
@@ -24,7 +27,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.css$/i,
+        test: /\.css(?<!\.module\.css)$/i, // ends with .css, but NOT .module.css
         use: ['style-loader', 'css-loader'],
       }
     ],
@@ -39,6 +42,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({

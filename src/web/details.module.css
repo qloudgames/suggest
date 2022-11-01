@@ -1,3 +1,40 @@
 .details {
   /* */
 }
+
+.addComment {
+  text-align: center;
+}
+
+.commentBox {
+  border-radius: 15px 15px 0 0;
+  resize: none;
+}
+
+.commentName {
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 5px;
+  margin-top: -1px;
+}
+
+.addButton {
+  border-radius: 10px;
+}
+
+.comments {
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: none;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.comments > :first-child {
+  padding: 12px 24px;
+}
+
+.commentReplyButton {
+  border-radius: 8px;
+  font-size: 0.9em;
+  background-color: rgba(255, 255, 255, 0.5);
+}

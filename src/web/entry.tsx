@@ -1,62 +1,38 @@
 import * as React from 'react';
-import { Button, Card, Tooltip } from 'antd';
+import { Card } from 'antd';
 import styles from './entry.module.css';
 import { EntryData, getEntryTimeElapsed } from 'common/types';
 import { InlineSeparator, StyledLink } from './component_util';
+import { Vote, VoteState } from './vote';
 
 type Props = {
   entry: EntryData;
+  enableLinks?: boolean;
 }
 
-export const Entry = ({ entry }: Props) => {
+export const Entry = ({ entry, enableLinks }: Props) => {
   //
-  const [voted, setVoted] = React.useState<string>('');
-  const onLike = () => setVoted(voted !== 'like' ? 'like' : '');
-  const onDislike = () => setVoted(voted !== 'dislike' ? 'dislike' : '');
+  const [voteState, setVoted] = React.useState<VoteState>(undefined);
+  const onLike = () => setVoted(voteState !== 'liked' ? 'liked' : undefined);
+  const onDislike = () => setVoted(voteState !== 'disliked' ? 'disliked' : undefined);
 
   return (
     <div className={styles.entryWrapper}>
       <Card.Grid key={entry.id} title={entry.title} className={styles.entry}>
 
-        {/* Vote area */}
-        <div className={styles.vote}>
-          <Tooltip title="I like this idea!" placement="left">
-            <Button
-              type={voted === 'like' ? 'primary' : 'dashed'}
-              danger
-              shape="circle"
-              className={styles.voteButton}
-              onClick={onLike}
-            >
-              😍
-            </Button>
-          </Tooltip>
-          <span className={styles.voteCount}>
-            17
-          </span>
-          <Tooltip title="Not too sure about this" placement="left">
-            <Button
-              type={voted === 'dislike' ? 'primary' : 'dashed'}
-              shape="circle"
-              className={styles.voteButton}
-              onClick={onDislike}
-            >
-              😞
-            </Button>
-          </Tooltip>
-        </div>
+        <Vote state={voteState} voteCount={17} onLike={onLike} onDislike={onDislike}/>
 
         {/* Main area */}
         <div className={styles.entryContent}>
-          <div className={styles.description}>
-            <StyledLink to="/details">
+          <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>
+            <div className={styles.description}>
               {entry.description}
-            </StyledLink>
-          </div>
+            </div>
+          </StyledLink>
           <div className={styles.metadata}>
             By {entry.author}, {getEntryTimeElapsed(entry)} ago
             <InlineSeparator/>
-            <StyledLink to="/details">3 comments</StyledLink>
+            <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>3 comments</StyledLink>
           </div>
         </div>
 

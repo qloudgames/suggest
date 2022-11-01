@@ -9,45 +9,13 @@
 
   display: flex;
   flex-direction: row;
+  cursor: default;
 }
 .entry:first-child {
   margin-top: 0;
 }
 
-.vote {
-  position: relative;
-  left: -10px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.vote > *:not(:last-child) {
-  margin-bottom: 2px;
-}
-.voteCount {
-  font-size: 1.2em;
-  font-weight: 600;
-}
-.voteButton > * {
-  transform: scale(1.4);
-}
-@media (max-width: 981px) {
-  .vote {
-    left: 15px;
-    margin-right: 45px;
-  }
-  .vote > *:not(:last-child) {
-    margin-bottom: 5px;
-  }
-  .voteButton {
-    transform: scale(1.8);
-  }
-}
-
 .description {
-  cursor: pointer;
   margin-bottom: 40px;
 }
 @media (max-width: 981px) {

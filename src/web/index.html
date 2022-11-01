@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Suggestions</title>
     <link href="http://fonts.cdnfonts.com/css/raleway-5" rel="stylesheet">
     <style>
@@ -48,6 +49,11 @@
     <!-- TODO: change all of these dependencies to use npm -->
     <script src='https://unpkg.com/trianglify@^4/dist/trianglify.bundle.js'></script>
     <script>
+      function regenerateBackground() {
+        const existing = document.getElementsByClassName('background');
+        if (existing.length > 0)
+          document.body.removeChild(existing.item(0));
+
         const pattern = trianglify({
             width: window.innerWidth,
             height: window.innerHeight
@@ -55,6 +61,13 @@
         const element = pattern.toCanvas();
         element.classList.add('background');
         document.body.appendChild(element);
+      }
+
+      regenerateBackground();
+      window.onresize = () => {
+        // TODO: don't flash and change colours, just regenerate at larger size
+        regenerateBackground();
+      };
     </script>
   </body>
 </html>

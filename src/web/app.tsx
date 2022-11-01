@@ -11,6 +11,7 @@ import { Entry } from './entry';
 import { Details } from './details';
 import { StyledLink } from './component_util';
 import logo from './assets/loftia-logo.png';
+import { Create } from './create';
 
 const { Title } = Typography;
 
@@ -38,7 +39,9 @@ const Home = () => (
           <p>Here you can check out, vote and comment on all of the cool things that others in the Loftia community have thought about.</p>
           <p>Or, do you have an idea for something you'd like to be in Loftia?</p>
         </div>
-        <Button className={styles.submitAlertButton} shape="round" type="primary">Submit Your Idea!</Button>
+        <StyledLink to="/new" enabled={true}>
+          <Button className={styles.submitAlertButton} shape="round" type="primary">Submit Your Idea!</Button>
+        </StyledLink>
       </>
     }/>
     {FakeEntries.map(entry => (
@@ -63,6 +66,8 @@ class SuggestionsRoot extends React.Component<{}> {
             <Routes>
               <Route path="/" element={<Home/>} />
               <Route path="details/:entryId" element={<Details/>} />
+              <Route path="/new" element={<Create/>}/>
+              <Route path="*" element={<Home/>}/>
             </Routes>
           </Card>
         </div>

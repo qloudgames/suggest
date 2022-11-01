@@ -1,0 +1,19 @@
+.createContainer {
+  text-align: center;
+}
+
+.title {
+  border-radius: 10px 10px 0 0;
+}
+
+.body {
+  resize: none;
+}
+
+.name {
+  border-radius: 0 0 10px 10px;
+}
+
+.createButton {
+  margin-top: 10px;
+}

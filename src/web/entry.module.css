@@ -15,6 +15,16 @@
   margin-top: 0;
 }
 
+.entry.compact {
+  max-height: 260px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.2em;
+  margin-bottom: 3px;
+}
+
 .description {
   margin-bottom: 40px;
 }
@@ -24,9 +34,16 @@
   }
 }
 
+.readMore {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.8em;
+  font-style: italic;
+}
+
 .metadata {
   position: absolute;
-  bottom: 18px;
+  bottom: 15px;
   color: rgba(0, 0, 0, 0.75);
   font-size: 0.9em;
 }

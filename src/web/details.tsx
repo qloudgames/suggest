@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Card, Comment, Input, Tooltip } from 'antd';
 import styles from './details.module.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FakeEntries } from 'common/fakes/fake_entries';
 import { Entry } from './entry';
 import { getFakeCommentsFor } from 'common/fakes/fake_comments';
@@ -23,7 +23,7 @@ export const Details = () => {
 
       <Back/>
 
-      <Entry entry={entry} enableLinks={false}/>
+      <Entry entry={entry} enableLinks={false} compact={false}/>
 
       <div className={styles.addComment}>
         <Input.TextArea className={styles.commentBox} rows={4} placeholder="what do you think about this idea?" maxLength={2000} />

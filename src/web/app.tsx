@@ -10,6 +10,7 @@ import styles from './app.module.css';
 import { Entry } from './entry';
 import { EntryData } from 'common/types';
 import { Details } from './details';
+import { StyledLink } from './component_util';
 
 const { Title } = Typography;
 
@@ -28,20 +29,17 @@ class SuggestionsRoot extends React.Component<Props> {
     return (
       <BrowserRouter>
         <div className={styles.page}>
-
-          <Title level={2} className={styles.heading}>{Config.heading}</Title>
+          <StyledLink to="/" enabled={true}>
+            <Title level={2} className={styles.heading}>{Config.heading}</Title>
+          </StyledLink>
           <Card className={styles.container}>
-
-            
-          <Routes>
-            <Route path="/" element={FakeEntries.map(entry => (
-                <Entry key={entry.id} entry={entry} enableLinks={true}/>
-              ))} />
-            <Route path="details/:entryId" element={<Details/>} />
-          </Routes>
-
+            <Routes>
+              <Route path="/" element={FakeEntries.map(entry => (
+                  <Entry key={entry.id} entry={entry} enableLinks={true}/>
+                ))} />
+              <Route path="details/:entryId" element={<Details/>} />
+            </Routes>
           </Card>
-
         </div>
       </BrowserRouter>
     );

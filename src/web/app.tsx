@@ -8,14 +8,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { FakeEntries } from 'common/fakes/fake_entries';
 import styles from './app.module.css';
 import { Entry } from './entry';
-import { EntryData } from 'common/types';
 import { Details } from './details';
 import { StyledLink } from './component_util';
+import logo from './assets/loftia-logo.png';
 
 const { Title } = Typography;
 
 const Config = {
-  heading: 'What do you think should be included?',
+  heading: 'What would you like to see in the game?',
 };
 
 type Props = {};
@@ -29,7 +29,8 @@ class SuggestionsRoot extends React.Component<Props> {
     return (
       <BrowserRouter>
         <div className={styles.page}>
-          <StyledLink to="/" enabled={true}>
+          <StyledLink className={styles.header} to="/" enabled={true}>
+            <img className={styles.logo} src={logo}/>
             <Title level={2} className={styles.heading}>{Config.heading}</Title>
           </StyledLink>
           <Card className={styles.container}>

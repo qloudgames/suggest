@@ -29,6 +29,14 @@ module.exports = {
       {
         test: /\.css(?<!\.module\.css)$/i, // ends with .css, but NOT .module.css
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
       }
     ],
   },

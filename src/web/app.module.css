@@ -9,23 +9,23 @@
   margin-bottom: 4vh !important;
 }
 
-.entriesContainer {
+.container {
   width: 35%;
   min-width: 500px;
   background: transparent;
   border: 0;
 }
-.entriesContainer > *:first-child {
+.container > *:first-child {
   padding: 0;
 }
 
 @media (max-width: 981px) {
   * {
     /* TODO: how to scale for mobile properly? */
-    font-size: 1.25em;
+    font-size: 1.2em;
   }
 
-  .entriesContainer {
+  .container {
     width: 90%;
   }
 }

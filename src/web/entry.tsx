@@ -2,12 +2,11 @@ import * as React from 'react';
 import { Button, Card, Tooltip } from 'antd';
 import styles from './entry.module.css';
 import { EntryData, getEntryTimeElapsed } from 'common/types';
+import { InlineSeparator, StyledLink } from './component_util';
 
 type Props = {
   entry: EntryData;
 }
-
-const InlineSeparator = () => <span style={{ color: 'black', textDecoration: 'bold' }}>&nbsp;|&nbsp;</span>;
 
 export const Entry = ({ entry }: Props) => {
   //
@@ -49,11 +48,15 @@ export const Entry = ({ entry }: Props) => {
 
         {/* Main area */}
         <div className={styles.entryContent}>
-          <div className={styles.description}>{entry.description}</div>
+          <div className={styles.description}>
+            <StyledLink to="/details">
+              {entry.description}
+            </StyledLink>
+          </div>
           <div className={styles.metadata}>
             By {entry.author}, {getEntryTimeElapsed(entry)} ago
             <InlineSeparator/>
-            3 comments
+            <StyledLink to="/details">3 comments</StyledLink>
           </div>
         </div>
 

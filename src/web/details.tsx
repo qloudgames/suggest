@@ -7,13 +7,21 @@ import { Entry } from './entry';
 import { getFakeCommentsFor } from 'common/fakes/fake_comments';
 import { Vote } from './vote';
 import { Back } from './app';
+import { ApiService } from './services/api_service';
+import { EntryData } from 'common/types';
 
-export const Details = () => {
+export const Details = ({ apiService }: { apiService: ApiService }) => {
   const { entryId }= useParams();
   // TODO: fetch comments from API
 
   const index = Number.parseInt(entryId);
-  const entry = FakeEntries[index];
+
+  // TODO: inject from prefetched data instead of referencing globals
+  const entry: EntryData = {
+    ...FakeEntries[index],
+    // voteState: apiService.getVoteStateForEntry(FakeEntries[index].id),
+    voteState: undefined,
+  };
   
   const addComment = (): void => undefined;
   const comments = getFakeCommentsFor(index);
@@ -23,7 +31,7 @@ export const Details = () => {
 
       <Back/>
 
-      <Entry entry={entry} enableLinks={false} compact={false}/>
+      <Entry entry={entry} apiService={apiService} enableLinks={false} compact={false}/>
 
       <div className={styles.addComment}>
         <Input.TextArea className={styles.commentBox} rows={4} placeholder="what do you think about this idea?" maxLength={2000} />
@@ -43,18 +51,16 @@ export const Details = () => {
                     type="default"
                     size="small"
                     className={styles.commentReplyButton}
-                    // disabled={true}
                   >
                       Reply
                   </Button>
                 </Tooltip>
               ]}
               author={comment.author}
-              // avatar={<Avatar style={{ backgroundColor: randomColor() }} icon={<UserOutlined />} />}
               avatar={
                 <Vote
                   voteCount={0}
-                  state={'liked'}
+                  state={'like'}
                   onLike={() => undefined}
                   onDislike={() => undefined}
                   size="small"

@@ -3,7 +3,7 @@ import { Button, Tooltip } from 'antd';
 import styles from './vote.module.css';
 import * as classNames from 'classnames';
 
-export type VoteState = 'liked' | 'disliked' | undefined;
+export type VoteState = 'like' | 'dislike' | undefined;
 
 type Props = {
   voteCount: number;
@@ -32,10 +32,10 @@ export const Vote = ({ voteCount, state, onLike, onDislike, size = 'middle', lik
     })}>
       <MaybeTooltip title="I like this idea!" enabled={!small}>
         <Button
-          type={state === 'liked' ? likedButtonType : 'dashed'}
+          type={state === 'like' ? likedButtonType : 'dashed'}
           danger={!small}
           shape="circle"
-          className={classNames(styles.voteButton, { [styles.faded]: size === 'small' && state !== 'liked' })}
+          className={classNames(styles.voteButton, { [styles.faded]: size === 'small' && state !== 'like' })}
           onClick={onLike}
           size={size}
         >
@@ -47,9 +47,9 @@ export const Vote = ({ voteCount, state, onLike, onDislike, size = 'middle', lik
       </span>
       <MaybeTooltip title="Not too sure about this" enabled={!small}>
         <Button
-          type={state === 'disliked' ? likedButtonType : 'dashed'}
+          type={state === 'dislike' ? likedButtonType : 'dashed'}
           shape="circle"
-          className={classNames(styles.voteButton, { [styles.faded]: size === 'small' && state !== 'disliked' })}
+          className={classNames(styles.voteButton, { [styles.faded]: size === 'small' && state !== 'dislike' })}
           onClick={onDislike}
           size={size}
         >

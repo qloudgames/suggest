@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TypescriptCssModulesPlugin = require('typescript-plugin-css-modules');
 
 module.exports = {
   entry: './src/web/app.tsx',
@@ -12,7 +11,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/i,
+        test: /\.module\.css$/i,
         use: [
           'style-loader', 
           {
@@ -24,10 +23,18 @@ module.exports = {
           }
         ],
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      }
     ],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    modules: [
+      path.resolve(__dirname, 'src'),
+      'node_modules'
+    ],
   },
   output: {
     filename: 'bundle.js',
@@ -37,6 +44,5 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'web', 'index.html'),
     }),
-    // new TypescriptCssModulesPlugin(),
   ],
 };

@@ -3,8 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { Card, Typography } from 'antd';
 // TODO: clean this up
 import 'antd/dist/antd.css';
-import styles from './app.module.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import { FakeEntries } from 'common/fakes/fake_entries';
+import styles from './app.module.css';
 import { Entry } from './entry';
 import { EntryData } from 'common/types';
 import { Details } from './details';
@@ -17,56 +19,31 @@ const Config = {
 
 type Props = {};
 
-type State = {
-  display: 'list' | 'details' | 'new';
-  entry?: EntryData;
-};
-
-class SuggestionsRoot extends React.Component<Props, State> {
+class SuggestionsRoot extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-
-    this.state = {
-      display: 'list',
-    };
   }
-
-  override componentDidMount() {
-    if (window.history) {
-      const prevUrl = window.location.href;
-      window.addEventListener('hashchange', () => {
-        window.history.pushState({}, null, prevUrl);
-      });
-    }
-  }
-
-  private readonly showEntryDetails = (entry: EntryData) => {
-    this.setState({
-      display: 'details',
-      entry,
-    });
-  };
 
   render() {
     return (
-      <div className={styles.page}>
+      <BrowserRouter>
+        <div className={styles.page}>
 
-        <Title level={2} className={styles.heading}>{Config.heading}</Title>
-        <Card className={styles.container}>
-        
-        {this.state.display === 'list' && (
-            FakeEntries.map(entry => (
-              <Entry entry={entry} showEntryDetails={this.showEntryDetails}/>
-            ))
-        )}
+          <Title level={2} className={styles.heading}>{Config.heading}</Title>
+          <Card className={styles.container}>
 
-        {this.state.display === 'details' && (
-            <Details entry={this.state.entry}/>
-        )}
+            
+          <Routes>
+            <Route path="/" element={FakeEntries.map(entry => (
+                <Entry entry={entry}/>
+              ))} />
+            <Route path="details" element={<Details/>} />
+          </Routes>
 
-        </Card>
+          </Card>
 
-      </div>
+        </div>
+      </BrowserRouter>
     );
   }
 }

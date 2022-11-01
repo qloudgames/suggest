@@ -2,21 +2,17 @@ import * as React from 'react';
 import { Button, Card, Tooltip } from 'antd';
 import styles from './entry.module.css';
 import { EntryData, getEntryTimeElapsed } from 'common/types';
-import { FShowEntryDetails } from './details';
-import { InlineSeparator } from './component_util';
+import { InlineSeparator, StyledLink } from './component_util';
 
 type Props = {
   entry: EntryData;
-  showEntryDetails: FShowEntryDetails;
 }
 
-export const Entry = ({ entry, showEntryDetails }: Props) => {
+export const Entry = ({ entry }: Props) => {
   //
   const [voted, setVoted] = React.useState<string>('');
   const onLike = () => setVoted(voted !== 'like' ? 'like' : '');
   const onDislike = () => setVoted(voted !== 'dislike' ? 'dislike' : '');
-
-  const showDetails = () => showEntryDetails(entry);
 
   return (
     <div className={styles.entryWrapper}>
@@ -52,11 +48,15 @@ export const Entry = ({ entry, showEntryDetails }: Props) => {
 
         {/* Main area */}
         <div className={styles.entryContent}>
-          <div className={styles.description} onClick={showDetails}>{entry.description}</div>
+          <div className={styles.description}>
+            <StyledLink to="/details">
+              {entry.description}
+            </StyledLink>
+          </div>
           <div className={styles.metadata}>
             By {entry.author}, {getEntryTimeElapsed(entry)} ago
             <InlineSeparator/>
-            <a href="#" onClick={showDetails}>3 comments</a>
+            <StyledLink to="/details">3 comments</StyledLink>
           </div>
         </div>
 

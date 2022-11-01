@@ -5,11 +5,7 @@ import { CommentData, EntryData } from 'common/types';
 
 export type FShowEntryDetails = (entry: EntryData) => void;
 
-type Props = {
-  entry: EntryData;
-}
-
-export const Details = ({ entry }: Props) => {
+export const Details = () => {
 
   // TODO: fetch comments from API
 

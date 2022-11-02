@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Card } from 'antd';
 import styles from './entry.module.css';
-import { EntryData, getEntryTimeElapsed } from 'common/types';
+import { EntryData, getEntryTimeElapsed, VoteState } from 'common/types';
 import { InlineSeparator, StyledLink } from './component_util';
-import { Vote, VoteState } from './vote';
+import { Vote } from './vote';
 import * as classNames from 'classnames';
 import { ApiService } from './services/api_service';
 

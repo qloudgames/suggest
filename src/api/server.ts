@@ -8,15 +8,15 @@ const server: FastifyInstance = Fastify({
     level: 'warn',
   },
 });
-// server.register(databaseConnector);
+
+server.register(databaseConnector);
 server.register(routeEntry);
 
-const start = async () => {
+async function main() {
+
   await server.register(cors, {
     // opts...
   });
-
-  server.log.info('Registering endpoints...');
 
   try {
     await server.listen({ port: 3000, host: '0.0.0.0' });
@@ -34,4 +34,4 @@ const start = async () => {
   }
 }
 
-start();
+main();

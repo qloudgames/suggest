@@ -1,5 +1,4 @@
-import { FakeEntries } from 'common/fakes/fake_entries';
-import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { routeGetEntry } from './get_entry';
 import { routeListEntries } from './list_entries';
 

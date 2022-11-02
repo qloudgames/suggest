@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Button, Tooltip } from 'antd';
 import styles from './vote.module.css';
 import * as classNames from 'classnames';
-
-export type VoteState = 'like' | 'dislike' | undefined;
+import { VoteState } from 'common/types';
 
 type Props = {
   voteCount: number;

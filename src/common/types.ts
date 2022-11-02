@@ -1,4 +1,4 @@
-import { VoteState } from "web/vote";
+export type VoteState = 'like' | 'dislike' | undefined;
 
 export type EntryData = {
   id: number;

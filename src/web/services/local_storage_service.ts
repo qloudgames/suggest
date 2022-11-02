@@ -1,4 +1,4 @@
-import { VoteState } from 'web/vote';
+import { VoteState } from 'common/types';
 
 /** Extended by both the HttpApiClient and the FakeApiService */
 export class LocalStorageService {

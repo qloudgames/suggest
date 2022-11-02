@@ -17,7 +17,7 @@ const opts: RouteShorthandOptions = {
 };
 
 export function routeListEntries(server: FastifyInstance) {
-  // const collection = server.mongo.db.collection('suggest');
+  const collection = server.mongo.db.collection('entries');
 
   server.get('/', opts, async (req: FastifyRequest, res: FastifyReply) => {
 

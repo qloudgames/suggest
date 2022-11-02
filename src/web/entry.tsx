@@ -18,18 +18,20 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
   //
   const [voteState, setVoted] = React.useState<VoteState>(entry.voteState);
   const onLike = () => {
-    setVoted(voteState !== 'like' ? 'like' : undefined);
     apiService.voteOnEntry({
       id: entry.id,
-      voteAction: voteState !== 'like' ? 'like' : 'clear',
+      fromVoteState: entry.voteState,
+      toVoteState: voteState !== 'like' ? 'like' : 'none',
     });
+    setVoted(voteState !== 'like' ? 'like' : undefined);
   };
   const onDislike = () => {
-    setVoted(voteState !== 'dislike' ? 'dislike' : undefined);
     apiService.voteOnEntry({
       id: entry.id,
-      voteAction: voteState !== 'dislike' ? 'dislike' : 'clear',
+      fromVoteState: entry.voteState,
+      toVoteState: voteState !== 'dislike' ? 'dislike' : 'none',
     });
+    setVoted(voteState !== 'dislike' ? 'dislike' : undefined);
   };
 
   return (
@@ -50,7 +52,7 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
         <div className={styles.metadata}>
           By {entry.author}, {getEntryTimeElapsed(entry)} ago
           <InlineSeparator/>
-          <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>{entry.numComments} comments</StyledLink>
+          <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>{entry.numComments} comment{entry.numComments !== 1 && 's'}</StyledLink>
         </div>
       </div>
 

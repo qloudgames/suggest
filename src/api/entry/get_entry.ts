@@ -1,5 +1,6 @@
 import { getFakeCommentsFor } from 'common/fakes/fake_comments';
 import { FakeEntries } from 'common/fakes/fake_entries';
+import { FullEntryDataFromServer } from 'common/types';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -17,7 +18,7 @@ type Params = {
 };
 
 export function routeGetEntry(server: FastifyInstance) {
-  const collection = server.mongo.db.collection('suggest');
+  const collection = server.mongo.db.collection('entries');
 
   server.get('/entry/:entryId', {}, async (req: FastifyRequest, res: FastifyReply) => {
     // return full entry, including comments
@@ -25,13 +26,42 @@ export function routeGetEntry(server: FastifyInstance) {
     // TODO: verify params is integer
     const entryId = parseInt(params.entryId);
 
-    // TODO: use database
-    // const result = await collection.find().toArray();
+    const result = await collection.findOne(
+      { id: entryId },
+    );
 
-    const entry = {
-      ...FakeEntries[entryId],
-      comments: getFakeCommentsFor(entryId),
+    if (result == null) {
+      res.code(404);
+      return;
+    }
+
+    const {
+      id,
+      title,
+      author,
+      description,
+      timestamp,
+      voteCount,
+      comments,
+    } = result;
+    const entry: FullEntryDataFromServer = {
+      id,
+      title,
+      author,
+      description,
+      timestamp,
+      voteCount,
+      comments: comments.map(({ id, author, timestamp, comment, voteCount: commentVoteCount }: any) => ({
+        // remove _id
+        id,
+        author,
+        timestamp,
+        comment,
+        voteCount: commentVoteCount,
+      })),
+      numComments: comments.length,
     };
+    
     return JSON.stringify(entry);
   });
 }

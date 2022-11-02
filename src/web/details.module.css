@@ -45,3 +45,9 @@
 .commentPosted > div > :first-child {
   font-weight: 600;
 }
+
+.emptyComments {
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+}

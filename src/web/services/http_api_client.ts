@@ -51,8 +51,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
         body,
       }),
     });
-    const { entryId } = await res.json();
-    return entryId;
+    return await res.json();
   }
 
   async addComment(req: AddCommentRequest): Promise<void> {

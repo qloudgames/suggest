@@ -23,10 +23,12 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
   }, []);
 
   const onVoteComment = (comment: CommentData, button: 'like' | 'dislike') => {
-    const voteAction = comment.voteState !== button ? button : 'clear';
+    const toVoteState = comment.voteState !== button ? button : 'none';
     apiService.voteOnComment({
-      id: comment.id,
-      voteAction,
+      entryId: entry.id,
+      commentId: comment.id,
+      fromVoteState: comment.voteState,
+      toVoteState,
     });
     // update locally too
     setEntry({
@@ -35,7 +37,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
         c.id === comment.id
             ? {
                 ...c,
-                voteState: voteAction !== 'clear' ? voteAction : undefined,
+                voteState: toVoteState !== 'none' ? toVoteState : undefined,
               }
             : c
       )),
@@ -154,7 +156,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                   author={comment.author}
                   avatar={
                     <Vote
-                      voteCount={0}
+                      voteCount={comment.voteCount}
                       state={comment.voteState}
                       onLike={() => onVoteComment(comment, 'like')}
                       onDislike={() => onVoteComment(comment, 'dislike')}

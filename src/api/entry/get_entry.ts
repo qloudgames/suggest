@@ -26,8 +26,6 @@ export function routeGetEntry(server: FastifyInstance) {
     // TODO: verify params is integer
     const entryId = parseInt(params.entryId);
 
-    // TODO: use database
-    server.log.warn(`looking for id: ${entryId}`);
     const result = await collection.findOne(
       { id: entryId },
     );
@@ -53,12 +51,13 @@ export function routeGetEntry(server: FastifyInstance) {
       description,
       timestamp,
       voteCount,
-      comments: comments.map(({ id, author, timestamp, comment }: any) => ({
+      comments: comments.map(({ id, author, timestamp, comment, voteCount: commentVoteCount }: any) => ({
         // remove _id
         id,
         author,
         timestamp,
         comment,
+        voteCount: commentVoteCount,
       })),
       numComments: comments.length,
     };

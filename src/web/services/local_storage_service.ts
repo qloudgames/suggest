@@ -40,7 +40,7 @@ export class LocalStorageService {
   }
 
   getLocalName(): string {
-    return this.storage.getItem('local_name');
+    return this.storage.getItem('local_name') || '';
   }
 
   setLocalName(name: string) {

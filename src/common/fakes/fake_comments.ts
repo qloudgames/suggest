@@ -11,6 +11,7 @@ export function getFakeCommentsFor(entryId: number): CommentDataFromServer[] {
       author: `someone_${randAuthorId}`,
       timestamp: Date.now(),
       comment: `This is a pretty cool idea, I support this! - commenter_${randAuthorId}`,
+      voteCount: Math.floor(Math.random() * 50),
     });
   }
 

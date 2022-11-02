@@ -13,7 +13,7 @@ import logo from './assets/loftia-logo.png';
 import { Create } from './create';
 import { HttpApiClient } from './services/http_api_client';
 import { ApiService } from './services/api_service';
-import { EntryData, VoteAction } from 'common/types';
+import { EntryData } from 'common/types';
 import { FakeApiService } from './services/fake_api_service';
 
 const { Title } = Typography;

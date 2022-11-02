@@ -46,11 +46,11 @@ export class FakeApiService extends LocalStorageService implements ApiService {
 
   async voteOnEntry(req: VoteOnEntryRequest): Promise<void> {
     await wait(100);
-    this.updateVoteStateForEntry(req.id, req.voteAction !== 'clear' ? req.voteAction : undefined);
+    this.updateVoteStateForEntry(req.id, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 
   async voteOnComment(req: VoteOnCommentRequest): Promise<void> {
     await wait(100);
-    this.updateVoteStateForComment(req.id, req.voteAction !== 'clear' ? req.voteAction : undefined);
+    this.updateVoteStateForComment(req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 }

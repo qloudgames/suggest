@@ -75,24 +75,36 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
   }
 
   async voteOnEntry(req: VoteOnEntryRequest): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/entry/${req.id}/vote/${req.voteAction}`);
+    const res = await fetch(`${this.baseUrl}/entry/${req.id}/vote`, {
+      method: 'post',
+      body: JSON.stringify({
+        fromVoteState: req.fromVoteState,
+        toVoteState: req.toVoteState,
+      }),
+    });
     if (res.status !== 200) {
       throw Error(`failed to vote on entry, status came back as: ${res.status}`);
     }
     
-    this.updateVoteStateForEntry(req.id, req.voteAction !== 'clear' ? req.voteAction : undefined);
+    this.updateVoteStateForEntry(req.id, req.toVoteState !== 'none' ? req.toVoteState : undefined);
 
     // also clear getEntries() cache because we modified how this entry should be displayed on home/listview
     this.clearGetEntriesCache();
   }
 
   async voteOnComment(req: VoteOnCommentRequest): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/comment/${req.id}/vote/${req.voteAction}`);
+    const res = await fetch(`${this.baseUrl}/entry/${req.entryId}/comment/${req.commentId}/vote`, {
+      method: 'post',
+      body: JSON.stringify({
+        fromVoteState: req.fromVoteState,
+        toVoteState: req.toVoteState,
+      }),
+    });
     if (res.status !== 200) {
       throw Error(`failed to vote on comment, status came back as: ${res.status}`);
     }
     
-    this.updateVoteStateForComment(req.id, req.voteAction !== 'clear' ? req.voteAction : undefined);
+    this.updateVoteStateForComment(req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 
   private clearGetEntriesCache(): void {

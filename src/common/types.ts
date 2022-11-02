@@ -1,4 +1,4 @@
-export type VoteState = 'like' | 'dislike' | undefined;
+export type VoteState = 'like' | 'dislike' | 'none';
 
 export type EntryData = {
   id: number;
@@ -22,6 +22,7 @@ export type CommentData = {
   author: string;
   timestamp: number;
   comment: string;
+  voteCount: number;
   voteState: VoteState;
 };
 
@@ -34,8 +35,6 @@ export type FullEntryDataFromServer = EntryDataFromServer & {
 };
 
 export type CommentDataFromServer = Omit<CommentData, 'voteState'>;
-
-export type VoteAction = 'like' | 'dislike' | 'clear';
 
 // network requests
 export type AddEntryRequest = {
@@ -56,10 +55,13 @@ export type AddCommentRequest = {
 
 export type VoteOnEntryRequest = {
   id: number;
-  voteAction: VoteAction;
+  fromVoteState: VoteState;
+  toVoteState: VoteState;
 };
 
 export type VoteOnCommentRequest = {
-  id: number;
-  voteAction: VoteAction;
+  entryId: number;
+  commentId: number;
+  fromVoteState: VoteState;
+  toVoteState: VoteState;
 };

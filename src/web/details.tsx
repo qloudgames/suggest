@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, Comment, Input, Tooltip } from 'antd';
+import { Alert, Button, Card, Comment, Input, Popover, Tooltip } from 'antd';
 import styles from './details.module.css';
 import { useParams } from 'react-router-dom';
 import { Entry } from './entry';
@@ -9,14 +9,17 @@ import { ApiService } from './services/api_service';
 import { CommentData, FullEntryData } from 'common/types';
 import { LoadingSpinner } from './component_util';
 
+type CommentFormState = 'show' | 'sending' | 'hidden';
+
 export const Details = ({ apiService }: { apiService: ApiService }) => {
   const entryId = parseInt(useParams().entryId);
   
-  let [entry, setEntry] = React.useState<FullEntryData>(undefined);
+  const [entry, setEntry] = React.useState<FullEntryData>(undefined);
+
+  const loadEntryDetails = () => apiService.getEntryDetails(entryId).then(e => setEntry(e));
 
   React.useEffect(() => {
-    apiService.getEntryDetails(entryId)
-        .then(e => setEntry(e));
+    loadEntryDetails();
   }, []);
 
   const onVoteComment = (comment: CommentData, button: 'like' | 'dislike') => {
@@ -38,8 +41,47 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
       )),
     });
   };
+
+  const [commentFormState, setCommentFormState] = React.useState<CommentFormState>('show');
+  const [name, setName] = React.useState<string>(apiService.getLocalName());
+  const [commentText, setCommentText] = React.useState<string>('');
+  const [commentError, setCommentError] = React.useState<string | undefined>(undefined);
+  const [commentErrorOpen, setCommentErrorOpen] = React.useState<boolean>(false);
+
+  const onNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setName(evt.target.value);
+    apiService.setLocalName(evt.target.value);
+  };
+  const onCommentTextChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentText(evt.target.value);
+  };
   
-  const addComment = (): void => undefined;
+  const addComment = (): void => {
+    if (name.length < 3) {
+      setCommentError('your name is too short');
+      setCommentErrorOpen(true);
+      setTimeout(() => setCommentErrorOpen(false), 1000);
+      return;
+    }
+    if (commentText.length < 10) {
+      setCommentError('your comment is too short');
+      setCommentErrorOpen(true);
+      setTimeout(() => setCommentErrorOpen(false), 1000);
+      return;
+    }
+    // post comment
+    setCommentFormState('sending');
+    apiService.addComment({
+      entryId: entry.id,
+      name,
+      comment: commentText,
+    }).then(() => {
+      setCommentFormState('hidden');
+      setCommentText('');
+      // reload comments to display our new comment
+      loadEntryDetails();
+    });
+  };
 
   return (
     <div className={styles.details}>
@@ -52,11 +94,42 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
         <>
           <Entry entry={entry} apiService={apiService} enableLinks={false} compact={false}/>
 
-          <div className={styles.addComment}>
-            <Input.TextArea className={styles.commentBox} rows={4} placeholder="what are your thoughts about this idea?" maxLength={2000} />
-            <Input className={styles.commentName} placeholder="your display name" maxLength={30}/>
-            <Button className={styles.addButton} type="default" onClick={addComment}>Add your comment!</Button>
-          </div>
+          {commentFormState === 'show' && (
+            <div className={styles.addComment}>
+              <Input.TextArea
+                value={commentText}
+                onChange={onCommentTextChange}
+                className={styles.commentBox}
+                rows={4}
+                placeholder="what are your thoughts about this idea?"
+                maxLength={2000} />
+              <Input
+                prefix={<span style={{ fontWeight: 600 }}>name: </span>}
+                value={name}
+                onChange={onNameChange}
+                className={styles.commentName}
+                placeholder="your display name"
+                maxLength={30}/>
+              <Popover
+                content={
+                  <span>{commentError}</span>
+                }
+                open={commentErrorOpen}
+              >
+                <Button className={styles.addButton} type="default" onClick={addComment}>Add your comment!</Button>
+              </Popover>
+            </div>
+          )}
+          {commentFormState === 'sending' && <LoadingSpinner/>}
+          {commentFormState === 'hidden' && (
+            <Alert
+              className={styles.commentPosted}
+              message="Thanks!"
+              description="Your comment has been posted below."
+              type="success"
+              showIcon
+              closable/>
+          )}
 
           <Card className={styles.comments}>
             {entry.comments.map(comment => (

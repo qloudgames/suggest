@@ -38,4 +38,12 @@ export class LocalStorageService {
   updateVoteStateForComment(commentId: number, voteState: VoteState): void {
     this.storage.setItem(`vc_${commentId}`, voteState);
   }
+
+  getLocalName(): string {
+    return this.storage.getItem('local_name');
+  }
+
+  setLocalName(name: string) {
+    this.storage.setItem('local_name', name);
+  }
 }

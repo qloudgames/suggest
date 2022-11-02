@@ -1,4 +1,4 @@
-import { EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 import { ApiService } from './api_service';
 import { LocalStorageService } from './local_storage_service';
 
@@ -39,6 +39,18 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
         voteState: this.getVoteStateForComment(c.id),
       })),
     };
+  }
+
+  async addComment(req: AddCommentRequest): Promise<void> {
+    const { entryId, name, comment } = req;
+    await fetch(`${this.baseUrl}/entry/${req.entryId}/comment`, {
+      method: 'post',
+      body: JSON.stringify({
+        entryId,
+        name,
+        comment,
+      }),
+    });
   }
 
   async voteOnEntry(req: VoteOnEntryRequest): Promise<void> {

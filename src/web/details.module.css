@@ -38,3 +38,10 @@
   font-size: 0.9em;
   background-color: rgba(255, 255, 255, 0.5);
 }
+
+.commentPosted {
+  border-radius: 15px;
+}
+.commentPosted > div > :first-child {
+  font-weight: 600;
+}

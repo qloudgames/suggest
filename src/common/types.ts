@@ -8,6 +8,7 @@ export type EntryData = {
   description: string;
   voteCount: number;
   voteState: VoteState;
+  numComments: number;
 };
 
 export type EntryDataFromServer = Omit<EntryData, 'voteState'>;

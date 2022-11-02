@@ -12,6 +12,7 @@ function createFakeEntry(id: number) {
     title: `Idea from person ${id}`,
     description: 'We want all of the pets and all of the pet accessories!',
     voteCount: Math.floor(Math.random() * 500),
+    numComments: Math.floor(Math.random() * 50),
   };
 }
 

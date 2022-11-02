@@ -50,7 +50,7 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
         <div className={styles.metadata}>
           By {entry.author}, {getEntryTimeElapsed(entry)} ago
           <InlineSeparator/>
-          <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>3 comments</StyledLink>
+          <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>{entry.numComments} comments</StyledLink>
         </div>
       </div>
 

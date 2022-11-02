@@ -27,8 +27,12 @@ export function routeCreateEntry(server: FastifyInstance) {
       description: body,
       timestamp: Date.now(),
       voteCount: 1, // author automatically upvotes
+      numComments: 0,
     };
-    collection.insertOne(document);
+    collection.insertOne({
+      ...document,
+      comments: [],
+    });
 
     return JSON.stringify({ entryId: id });
   });

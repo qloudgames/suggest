@@ -1,4 +1,4 @@
-import { FakeEntries } from 'common/fakes/fake_entries';
+import { EntryDataFromServer } from 'common/types';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -23,7 +23,28 @@ export function routeListEntries(server: FastifyInstance) {
 
     const results = await collection.find().toArray();
 
+    // TODO: improve performance by not loading comments here (and denormalizing numComments to another field?)
+    const entries: EntryDataFromServer[] = results.map(({
+      id,
+      title,
+      author,
+      description,
+      timestamp,
+      voteCount,
+      
+      // mutate these
+      comments,
+    }) => ({
+      id,
+      title,
+      author,
+      description,
+      timestamp,
+      voteCount,
+      numComments: comments.length,
+    }));
+
     // return list of entries without comments
-    return JSON.stringify(results);
+    return JSON.stringify(entries);
   });
 }

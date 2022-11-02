@@ -167,6 +167,9 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                   datetime={<span>9 hours ago</span>}
                 />
             ))}
+            {entry.comments.length === 0 && (
+              <div className={styles.emptyComments}>There aren't any comments here yet. You could be the first!</div>
+            )}
           </Card>
         </>
       )}

@@ -24,7 +24,7 @@ const MaybeTooltip = ({ title, enabled, children }: { title: string, enabled: bo
 export const Vote = ({ voteCount, state, onLike, onDislike, size = 'middle', likeEmoji, dislikeEmoji }: Props) => {
 
   const small = size === 'small';
-  const likedButtonType = !small ? 'primary' : 'dashed';
+  const likedButtonType = !small ? 'primary' : 'default';
 
   return (
     <div className={classNames(styles.vote, {
@@ -35,7 +35,11 @@ export const Vote = ({ voteCount, state, onLike, onDislike, size = 'middle', lik
           type={state === 'like' ? likedButtonType : 'dashed'}
           danger={!small}
           shape="circle"
-          className={classNames(styles.voteButton, { [styles.faded]: size === 'small' && state !== 'like' })}
+          className={classNames(styles.voteButton, {
+            [styles.faded]: size === 'small' && state !== 'like',
+            [styles.small]: small,
+            [styles.active]: state === 'like',
+          })}
           onClick={onLike}
           size={size}
         >
@@ -49,7 +53,11 @@ export const Vote = ({ voteCount, state, onLike, onDislike, size = 'middle', lik
         <Button
           type={state === 'dislike' ? likedButtonType : 'dashed'}
           shape="circle"
-          className={classNames(styles.voteButton, { [styles.faded]: size === 'small' && state !== 'dislike' })}
+          className={classNames(styles.voteButton, {
+            [styles.faded]: size === 'small' && state !== 'dislike',
+            [styles.small]: small,
+            [styles.active]: state === 'dislike',
+          })}
           onClick={onDislike}
           size={size}
         >

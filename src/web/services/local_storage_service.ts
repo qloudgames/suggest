@@ -1,13 +1,7 @@
 import { VoteState } from 'web/vote';
 
-export interface ILocalStorageService {
-  getVoteStateForEntry(entryId: number): VoteState;
-
-  updateVoteStateForEntry(entryId: number, voteState: VoteState): void;
-}
-
 /** Extended by both the HttpApiClient and the FakeApiService */
-export class LocalStorageService implements ILocalStorageService {
+export class LocalStorageService {
   
   private readonly storage: Storage;
 
@@ -28,5 +22,28 @@ export class LocalStorageService implements ILocalStorageService {
 
   updateVoteStateForEntry(entryId: number, voteState: VoteState): void {
     this.storage.setItem(`v_${entryId}`, voteState);
+  }
+
+  getVoteStateForComment(commentId: number): VoteState {
+    const result = this.storage.getItem(`vc_${commentId}`) as VoteState;
+    switch (result) {
+      case 'like':
+      case 'dislike':
+        return result;
+      default:
+        return undefined;
+    }
+  }
+
+  updateVoteStateForComment(commentId: number, voteState: VoteState): void {
+    this.storage.setItem(`vc_${commentId}`, voteState);
+  }
+
+  getLocalName(): string {
+    return this.storage.getItem('local_name');
+  }
+
+  setLocalName(name: string) {
+    this.storage.setItem('local_name', name);
   }
 }

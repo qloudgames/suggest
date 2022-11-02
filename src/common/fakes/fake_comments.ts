@@ -1,14 +1,13 @@
-import { CommentData } from 'common/types';
+import { CommentDataFromServer } from 'common/types';
 
-export function getFakeCommentsFor(entryId: number): CommentData[] {
+export function getFakeCommentsFor(entryId: number): CommentDataFromServer[] {
   const comments = [];
-  const numComments = Math.ceil(Math.random() * 10);
+  const numComments = 10;
 
   for (let i = 0; i < numComments; i++) {
-    const randId = Math.floor(Math.random() * 100);
     const randAuthorId = Math.floor(Math.random() * 100);
     comments.push({
-      id: randId,
+      id: (entryId * 10000) + i,
       author: `someone_${randAuthorId}`,
       timestamp: Date.now(),
       comment: `This is a pretty cool idea, I support this! - commenter_${randAuthorId}`,

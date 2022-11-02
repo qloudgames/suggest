@@ -1,4 +1,4 @@
-import { EntryData, EntryDataFromServer, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 import { ApiService } from './api_service';
 import { LocalStorageService } from './local_storage_service';
 
@@ -28,12 +28,54 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     return this.cachedGetEntries;
   }
 
+  async getEntryDetails(entryId: number): Promise<FullEntryData> {
+    const res = await fetch(`${this.baseUrl}/entry/${entryId}`);
+    const entry: FullEntryDataFromServer = await res.json();
+    return {
+      ...entry,
+      voteState: this.getVoteStateForEntry(entry.id),
+      comments: entry.comments.map(c => ({
+        ...c,
+        voteState: this.getVoteStateForComment(c.id),
+      })),
+    };
+  }
+
+  async addComment(req: AddCommentRequest): Promise<void> {
+    const { entryId, name, comment } = req;
+    await fetch(`${this.baseUrl}/entry/${req.entryId}/comment`, {
+      method: 'post',
+      body: JSON.stringify({
+        entryId,
+        name,
+        comment,
+      }),
+    });
+  }
+
   async voteOnEntry(req: VoteOnEntryRequest): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/entries/vote?id=${req.id}&action=${req.voteAction}`);
+    const res = await fetch(`${this.baseUrl}/entry/${req.id}/vote/${req.voteAction}`);
     if (res.status !== 200) {
-      throw Error(`failed to vote, status came back as: ${res.status}`);
+      throw Error(`failed to vote on entry, status came back as: ${res.status}`);
     }
     
     this.updateVoteStateForEntry(req.id, req.voteAction !== 'clear' ? req.voteAction : undefined);
+
+    // also clear getEntries() cache because we modified how this entry should be displayed on home/listview
+    this.clearGetEntriesCache();
+  }
+
+  async voteOnComment(req: VoteOnCommentRequest): Promise<void> {
+    const res = await fetch(`${this.baseUrl}/comment/${req.id}/vote/${req.voteAction}`);
+    if (res.status !== 200) {
+      throw Error(`failed to vote on comment, status came back as: ${res.status}`);
+    }
+    
+    this.updateVoteStateForComment(req.id, req.voteAction !== 'clear' ? req.voteAction : undefined);
+  }
+
+  private clearGetEntriesCache(): void {
+    this.lastGetEntriesTimestamp = 0;
+    this.cachedGetEntries = [];
   }
 }

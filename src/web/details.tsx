@@ -80,6 +80,9 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
       setCommentText('');
       // reload comments to display our new comment
       loadEntryDetails();
+    }).catch(err => {
+      console.error('Failed to post comment', err);
+      setCommentFormState('show');
     });
   };
 
@@ -102,7 +105,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                 className={styles.commentBox}
                 rows={4}
                 placeholder="what are your thoughts about this idea?"
-                maxLength={2000} />
+                maxLength={1000} />
               <Input
                 prefix={<span style={{ fontWeight: 600 }}>name: </span>}
                 value={name}

@@ -1,6 +1,6 @@
 import { getFakeCommentsFor } from 'common/fakes/fake_comments';
 import { FakeEntries } from 'common/fakes/fake_entries';
-import { AddCommentRequest, EntryData, FullEntryData, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, AddEntryRequest, AddEntryResponse, EntryData, FullEntryData, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 import { ApiService } from './api_service';
 import { LocalStorageService } from './local_storage_service';
 
@@ -27,6 +27,14 @@ export class FakeApiService extends LocalStorageService implements ApiService {
         ...c,
         voteState: this.getVoteStateForComment(c.id),
       })),
+    };
+  }
+
+  async addEntry(req: AddEntryRequest): Promise<AddEntryResponse> {
+    await wait(300);
+    // TODO: make creating posts work in fake mode
+    return {
+      entryId: 5,
     };
   }
 

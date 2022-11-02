@@ -37,6 +37,16 @@ export type CommentDataFromServer = Omit<CommentData, 'voteState'>;
 export type VoteAction = 'like' | 'dislike' | 'clear';
 
 // network requests
+export type AddEntryRequest = {
+  title: string;
+  name: string;
+  body: string;
+};
+
+export type AddEntryResponse = {
+  entryId: number;
+};
+
 export type AddCommentRequest = {
   entryId: number;
   name: string;

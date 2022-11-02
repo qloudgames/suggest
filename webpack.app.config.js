@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/web/app.tsx',
+  target: 'web',
   devServer: {
     historyApiFallback: true,
   },
@@ -57,4 +58,7 @@ module.exports = {
       template: path.join(__dirname, 'src', 'web', 'index.html'),
     }),
   ],
+  stats: {
+    errorDetails: true
+  }
 };

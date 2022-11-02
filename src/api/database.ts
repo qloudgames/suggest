@@ -1,14 +1,12 @@
-// ESM
-import fastifyPlugin from 'fastify-plugin';
-import fastifyMongo from '@fastify/mongodb';
 import { FastifyInstance } from 'fastify';
+import { MongoClient } from 'mongodb';
 
-/**
- * @param {FastifyInstance} fastify
- * @param {Object} options
- */
-export const databaseConnector = fastifyPlugin(async (fastify: FastifyInstance) => {
-  fastify.register(fastifyMongo, {
-    url: 'mongodb://localhost:27017/suggest',
-  });
-});
+const url = 'mongodb://127.0.0.1:27017';
+const client = new MongoClient(url);
+const dbName = 'suggest';
+
+export const connectToDatabase = async (server: FastifyInstance) => {
+  await client.connect();
+  
+  server.log.warn('connected to database server!');
+};

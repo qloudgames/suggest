@@ -1,22 +1,22 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { routeEntry } from './entry/index';
-import { databaseConnector } from './database';
+import { connectToDatabase } from './database';
 
-const server: FastifyInstance = Fastify({
-  logger: {
-    level: 'warn',
-  },
-});
-// server.register(databaseConnector);
-server.register(routeEntry);
+async function main() {
+  const server: FastifyInstance = Fastify({
+    logger: {
+      level: 'warn',
+    },
+  });
 
-const start = async () => {
+  connectToDatabase(server);
+
+  server.register(routeEntry);
+
   await server.register(cors, {
     // opts...
   });
-
-  server.log.info('Registering endpoints...');
 
   try {
     await server.listen({ port: 3000, host: '0.0.0.0' });
@@ -34,4 +34,4 @@ const start = async () => {
   }
 }
 
-start();
+main();

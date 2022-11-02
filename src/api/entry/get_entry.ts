@@ -17,8 +17,6 @@ type Params = {
 };
 
 export function routeGetEntry(server: FastifyInstance) {
-  // const collection = server.mongo.db.collection('suggest');
-
   server.get('/entry/:entryId', {}, async (req: FastifyRequest, res: FastifyReply) => {
     // return full entry, including comments
     const params: Params = req.params as Params;

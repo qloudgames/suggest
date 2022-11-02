@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Alert, Button, Card, PageHeader, Spin, Typography } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, PageHeader, Typography } from 'antd';
 // TODO: clean this up
 import 'antd/dist/antd.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -9,7 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import styles from './app.module.css';
 import { Entry } from './entry';
 import { Details } from './details';
-import { StyledLink } from './component_util';
+import { LoadingSpinner, StyledLink } from './component_util';
 import logo from './assets/loftia-logo.png';
 import { Create } from './create';
 import { HttpApiClient } from './services/http_api_client';
@@ -36,15 +35,9 @@ export const Back = () => {
   );
 };
 
-export const LoadingSpinner = () => (
-  <div className={styles.loadContainer}>
-    <Spin className={styles.load} indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-  </div>
-);
-
 const Home = ({ state, apiService, onMount }: { state: MainState, apiService: ApiService, onMount(): void }) => {
 
-  React.useEffect(() => onMount());
+  React.useEffect(() => onMount(), []);
 
   return (
     <>
@@ -84,10 +77,6 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
     this.state = {
       entries: undefined,
     };
-  }
-
-  componentDidMount() {
-    this.maybeLoadEntries();
   }
 
   private readonly maybeLoadEntries = () => {

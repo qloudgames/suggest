@@ -21,12 +21,28 @@ export type CommentData = {
   author: string;
   timestamp: number;
   comment: string;
+  voteState: VoteState;
 };
+
+export type FullEntryData = EntryData & {
+  comments: CommentData[];
+};
+
+export type FullEntryDataFromServer = EntryDataFromServer & {
+  comments: CommentDataFromServer[];
+};
+
+export type CommentDataFromServer = Omit<CommentData, 'voteState'>;
 
 export type VoteAction = 'like' | 'dislike' | 'clear';
 
 // network requests
 export type VoteOnEntryRequest = {
+  id: number;
+  voteAction: VoteAction;
+};
+
+export type VoteOnCommentRequest = {
   id: number;
   voteAction: VoteAction;
 };

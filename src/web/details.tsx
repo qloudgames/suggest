@@ -2,77 +2,98 @@ import * as React from 'react';
 import { Button, Card, Comment, Input, Tooltip } from 'antd';
 import styles from './details.module.css';
 import { useParams } from 'react-router-dom';
-import { FakeEntries } from 'common/fakes/fake_entries';
 import { Entry } from './entry';
-import { getFakeCommentsFor } from 'common/fakes/fake_comments';
 import { Vote } from './vote';
 import { Back } from './app';
 import { ApiService } from './services/api_service';
-import { EntryData } from 'common/types';
+import { CommentData, FullEntryData } from 'common/types';
+import { LoadingSpinner } from './component_util';
 
 export const Details = ({ apiService }: { apiService: ApiService }) => {
-  const { entryId }= useParams();
-  // TODO: fetch comments from API
+  const entryId = parseInt(useParams().entryId);
+  
+  let [entry, setEntry] = React.useState<FullEntryData>(undefined);
 
-  const index = Number.parseInt(entryId);
+  React.useEffect(() => {
+    apiService.getEntryDetails(entryId)
+        .then(e => setEntry(e));
+  }, []);
 
-  // TODO: inject from prefetched data instead of referencing globals
-  const entry: EntryData = {
-    ...FakeEntries[index],
-    // voteState: apiService.getVoteStateForEntry(FakeEntries[index].id),
-    voteState: undefined,
+  const onVoteComment = (comment: CommentData, button: 'like' | 'dislike') => {
+    const voteAction = comment.voteState !== button ? button : 'clear';
+    apiService.voteOnComment({
+      id: comment.id,
+      voteAction,
+    });
+    // update locally too
+    setEntry({
+      ...entry,
+      comments: entry.comments.map(c => (
+        c.id === comment.id
+            ? {
+                ...c,
+                voteState: voteAction !== 'clear' ? voteAction : undefined,
+              }
+            : c
+      )),
+    });
   };
   
   const addComment = (): void => undefined;
-  const comments = getFakeCommentsFor(index);
 
   return (
     <div className={styles.details}>
 
       <Back/>
 
-      <Entry entry={entry} apiService={apiService} enableLinks={false} compact={false}/>
+      {entry == null ? (
+        <LoadingSpinner/>
+      ) : (
+        <>
+          <Entry entry={entry} apiService={apiService} enableLinks={false} compact={false}/>
 
-      <div className={styles.addComment}>
-        <Input.TextArea className={styles.commentBox} rows={4} placeholder="what do you think about this idea?" maxLength={2000} />
-        <Input className={styles.commentName} placeholder="your display name" maxLength={30}/>
-        <Button className={styles.addButton} type="default" onClick={addComment}>Add your comment!</Button>
-      </div>
+          <div className={styles.addComment}>
+            <Input.TextArea className={styles.commentBox} rows={4} placeholder="what are your thoughts about this idea?" maxLength={2000} />
+            <Input className={styles.commentName} placeholder="your display name" maxLength={30}/>
+            <Button className={styles.addButton} type="default" onClick={addComment}>Add your comment!</Button>
+          </div>
 
-      <Card className={styles.comments}>
-        {comments.map(comment => (
-            <Comment
-              key={comment.id}
-              // TODO: only top-level comments are replyable
-              actions={[
-                <Tooltip title="feature coming soon..." placement="right">
-                  <Button
-                    key={`reply-${comment.id}`}
-                    type="default"
-                    size="small"
-                    className={styles.commentReplyButton}
-                  >
-                      Reply
-                  </Button>
-                </Tooltip>
-              ]}
-              author={comment.author}
-              avatar={
-                <Vote
-                  voteCount={0}
-                  state={'like'}
-                  onLike={() => undefined}
-                  onDislike={() => undefined}
-                  size="small"
-                  likeEmoji="👍"
-                  dislikeEmoji="👎"
+          <Card className={styles.comments}>
+            {entry.comments.map(comment => (
+                <Comment
+                  key={comment.id}
+                  // TODO: only top-level comments are replyable
+                  actions={[
+                    <Tooltip title="feature coming soon..." placement="right">
+                      <Button
+                        key={`reply-${comment.id}`}
+                        type="default"
+                        size="small"
+                        className={styles.commentReplyButton}
+                      >
+                          Reply
+                      </Button>
+                    </Tooltip>
+                  ]}
+                  author={comment.author}
+                  avatar={
+                    <Vote
+                      voteCount={0}
+                      state={comment.voteState}
+                      onLike={() => onVoteComment(comment, 'like')}
+                      onDislike={() => onVoteComment(comment, 'dislike')}
+                      size="small"
+                      likeEmoji="👍"
+                      dislikeEmoji="👎"
+                    />
+                  }
+                  content={comment.comment}
+                  datetime={<span>9 hours ago</span>}
                 />
-              }
-              content={comment.comment}
-              datetime={<span>9 hours ago</span>}
-            />
-        ))}
-      </Card>
+            ))}
+          </Card>
+        </>
+      )}
     </div>
   );
 };

@@ -5,3 +5,10 @@
 .link:hover {
   color: rgba(0, 0, 0, 0.7);
 }
+
+.loadContainer {
+  text-align: center;
+}
+.load {
+  margin-top: 15px;
+}

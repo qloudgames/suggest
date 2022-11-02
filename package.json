@@ -1,10 +1,12 @@
 {
   "name": "suggest",
-  "packageManager": "yarn@3.2.4",
   "scripts": {
-    "start": "webpack serve --mode=development --config ./webpack.app.config.js"
+    "start": "webpack serve --mode=development --config ./webpack.app.config.js",
+    "server": "webpack --mode=development --config ./webpack.server.config.js && node ./dist/server.js"
   },
   "dependencies": {
+    "@fastify/cors": "^8.1.1",
+    "@fastify/mongodb": "^6.1.0",
     "antd": "^4.23.6",
     "fastify": "^4.9.2",
     "react": "^18.2.0",
@@ -13,7 +15,7 @@
     "trianglify": "^4.1.1"
   },
   "devDependencies": {
-    "@types/node": "^18.11.8",
+    "@types/node": "^18.11.9",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "classnames": "^2.3.2",

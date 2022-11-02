@@ -109,7 +109,7 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
 }
 
 const root = createRoot(document.getElementById('root'));
-// const apiUrl = 'http://localhost:8081';
-// const apiService: ApiService = new HttpApiClient(apiUrl);
-const apiService: ApiService = new FakeApiService();
+const apiUrl = 'http://localhost:3000';
+const apiService: ApiService = new HttpApiClient(apiUrl);
+// const apiService: ApiService = new FakeApiService();
 root.render(<SuggestionsRoot apiService={apiService}/>);

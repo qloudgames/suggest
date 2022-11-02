@@ -1,18 +1,18 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { routeEntry } from './entry/index';
-import { connectToDatabase } from './database';
+import { databaseConnector } from './database';
+
+const server: FastifyInstance = Fastify({
+  logger: {
+    level: 'warn',
+  },
+});
+
+server.register(databaseConnector);
+server.register(routeEntry);
 
 async function main() {
-  const server: FastifyInstance = Fastify({
-    logger: {
-      level: 'warn',
-    },
-  });
-
-  connectToDatabase(server);
-
-  server.register(routeEntry);
 
   await server.register(cors, {
     // opts...

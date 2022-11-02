@@ -1,12 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { MongoClient } from 'mongodb';
+import fastifyPlugin from 'fastify-plugin';
+import fastifyMongo from '@fastify/mongodb';
 
-const url = 'mongodb://127.0.0.1:27017';
-const client = new MongoClient(url);
-const dbName = 'suggest';
-
-export const connectToDatabase = async (server: FastifyInstance) => {
-  await client.connect();
-  
-  server.log.warn('connected to database server!');
-};
+export const databaseConnector = fastifyPlugin(async (fastify: FastifyInstance) => {
+  fastify.register(fastifyMongo, {
+    url: 'mongodb://127.0.0.1:27017/suggest',
+  });
+});

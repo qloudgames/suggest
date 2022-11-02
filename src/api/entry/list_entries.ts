@@ -21,10 +21,9 @@ export function routeListEntries(server: FastifyInstance) {
 
   server.get('/', opts, async (req: FastifyRequest, res: FastifyReply) => {
 
-    // const result = await collection.find().toArray();
-    // TODO: map to EntryDataFromServer
+    const results = await collection.find().toArray();
 
     // return list of entries without comments
-    return JSON.stringify(FakeEntries);
+    return JSON.stringify(results);
   });
 }

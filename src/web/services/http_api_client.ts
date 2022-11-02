@@ -51,7 +51,15 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
         body,
       }),
     });
-    return await res.json();
+
+    // set localStorage to automatically upvote this one
+    const { entryId } = await res.json();
+    this.updateVoteStateForEntry(entryId, 'like');
+
+    // also clear getEntries() cache because we added a new entry that should be displayed on home/listview
+    this.clearGetEntriesCache();
+
+    return { entryId };
   }
 
   async addComment(req: AddCommentRequest): Promise<void> {

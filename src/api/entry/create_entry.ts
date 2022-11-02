@@ -1,5 +1,5 @@
 import { getNextCounter } from 'api/database';
-import { AddEntryRequest } from 'common/types';
+import { AddEntryRequest, EntryDataFromServer } from 'common/types';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -20,12 +20,15 @@ export function routeCreateEntry(server: FastifyInstance) {
 
     const id = await getNextCounter(server, 'entryId');
 
-    collection.insertOne({
+    const document: EntryDataFromServer = {
       id,
       title,
-      body,
-      name,
-    });
+      author: name,
+      description: body,
+      timestamp: Date.now(),
+      voteCount: 1, // author automatically upvotes
+    };
+    collection.insertOne(document);
 
     return JSON.stringify({ entryId: id });
   });

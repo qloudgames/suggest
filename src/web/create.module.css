@@ -8,6 +8,8 @@
 
 .body {
   resize: none;
+  min-height: 30vh !important;
+  max-height: 50vh;
 }
 
 .name {

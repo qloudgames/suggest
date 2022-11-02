@@ -98,7 +98,7 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
             <Routes>
               <Route path="/" element={<Home state={this.state} apiService={apiService} onMount={this.maybeLoadEntries}/>} />
               <Route path="details/:entryId" element={<Details apiService={apiService}/>} />
-              <Route path="/new" element={<Create/>}/>
+              <Route path="/new" element={<Create apiService={apiService}/>}/>
               <Route path="*" element={<Home state={this.state} apiService={apiService} onMount={this.maybeLoadEntries}/>}/>
             </Routes>
           </Card>

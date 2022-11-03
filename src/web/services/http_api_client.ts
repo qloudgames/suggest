@@ -64,7 +64,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
 
   async addComment(req: AddCommentRequest): Promise<void> {
     const { entryId, name, comment } = req;
-    await fetch(`${this.baseUrl}/entry/${req.entryId}/comment`, {
+    const res = await fetch(`${this.baseUrl}/entry/${req.entryId}/comment`, {
       method: 'post',
       body: JSON.stringify({
         entryId,
@@ -72,6 +72,8 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
         comment,
       }),
     });
+    const { commentId } = await res.json();
+    this.updateVoteStateForComment(commentId, 'like');
     this.clearGetEntriesCache();
   }
 

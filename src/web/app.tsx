@@ -4,7 +4,6 @@ import { Alert, Button, Card, PageHeader, Typography } from 'antd';
 // TODO: clean this up
 import 'antd/dist/antd.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import styles from './app.module.css';
 import { Entry } from './entry';
 import { Details } from './details';
@@ -14,7 +13,9 @@ import { Create } from './create';
 import { HttpApiClient } from './services/http_api_client';
 import { ApiService } from './services/api_service';
 import { EntryData } from 'common/types';
-import { FakeApiService } from './services/fake_api_service';
+
+
+const apiUrl = 'http://localhost:3000';
 
 const { Title } = Typography;
 
@@ -110,7 +111,6 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
 }
 
 const root = createRoot(document.getElementById('root'));
-const apiUrl = 'http://localhost:3000';
 const apiService: ApiService = new HttpApiClient(apiUrl);
 // const apiService: ApiService = new FakeApiService();
 root.render(<SuggestionsRoot apiService={apiService}/>);

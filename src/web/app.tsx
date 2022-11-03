@@ -34,14 +34,17 @@ class SuggestionsRoot extends React.Component<Props, MainState> {
     };
   }
 
-  private readonly loadEntries = () => {
+  private readonly loadEntries = (category?: Category) => {
     const { apiService } = this.props;
 
-    apiService.getEntries(this.state.selectedCategory).then(resultEntries => {
+    if (category == null)
+      category = this.state.selectedCategory;
+
+    apiService.getEntries(category).then(resultEntries => {
       this.setState({
         entries: {
           ...this.state.entries,
-          [this.state.selectedCategory]: resultEntries,
+          [category]: resultEntries,
         },
       });
     });
@@ -52,7 +55,7 @@ class SuggestionsRoot extends React.Component<Props, MainState> {
       selectedCategory: toCategory,
     });
     if (this.state.entries[toCategory] == null) {
-      this.loadEntries();
+      this.loadEntries(toCategory);
     }
   };
 

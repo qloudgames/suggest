@@ -3,8 +3,7 @@
   "scripts": {
     "start": "webpack serve --mode=development --config ./webpack.app.config.js",
     "build-web": "webpack --mode=production --config ./webpack.app.config.js",
-    "server": "webpack --mode=development --config ./webpack.server.config.js && node ./dist/server.js",
-    "server-prod": "webpack --mode=production --config ./webpack.server.config.js && node ./dist/server.js"
+    "server": "webpack --mode=development --config ./webpack.server.config.js && node ./dist/server.js"
   },
   "dependencies": {
     "@fastify/cors": "^8.1.1",

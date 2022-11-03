@@ -12,7 +12,7 @@ const server: FastifyInstance = Fastify({
 server.register(databaseConnector);
 server.register(routeEntry);
 
-const port = process.env.NODE_ENV === 'development' ? 3000 : 80;
+const port = 3000;
 
 async function main() {
 

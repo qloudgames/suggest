@@ -8,6 +8,7 @@ import { Back } from './app';
 import { ApiService } from './services/api_service';
 import { CommentData, FullEntryData } from 'common/types';
 import { LoadingSpinner } from './component_util';
+import { calculateVoteCountChange } from 'common/util';
 
 type CommentFormState = 'show' | 'sending' | 'hidden';
 
@@ -24,6 +25,8 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
 
   const onVoteComment = (comment: CommentData, button: 'like' | 'dislike') => {
     const toVoteState = comment.voteState !== button ? button : 'none';
+    const voteCountChange = calculateVoteCountChange(comment.voteState, toVoteState);
+
     apiService.voteOnComment({
       entryId: entry.id,
       commentId: comment.id,
@@ -37,6 +40,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
         c.id === comment.id
             ? {
                 ...c,
+                voteCount: comment.voteCount + voteCountChange,
                 voteState: toVoteState !== 'none' ? toVoteState : undefined,
               }
             : c
@@ -142,7 +146,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                   key={comment.id}
                   // TODO: only top-level comments are replyable
                   actions={[
-                    <Tooltip title="feature coming soon..." placement="right">
+                    <Tooltip title="nested comments coming soon..." placement="right">
                       <Button
                         key={`reply-${comment.id}`}
                         type="default"

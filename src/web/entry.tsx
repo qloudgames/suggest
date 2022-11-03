@@ -6,6 +6,7 @@ import { InlineSeparator, StyledLink } from './component_util';
 import { Vote } from './vote';
 import * as classNames from 'classnames';
 import { ApiService } from './services/api_service';
+import { calculateVoteCountChange } from 'common/util';
 
 type Props = {
   entry: EntryData;
@@ -16,28 +17,27 @@ type Props = {
 
 export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props) => {
   //
-  const [voteState, setVoted] = React.useState<VoteState>(entry.voteState);
-  const onLike = () => {
+  const [voteState, setVoteState] = React.useState<VoteState>(entry.voteState);
+  const [voteCount, setVoteCount] = React.useState<number>(entry.voteCount);
+
+  const onVote = (button: 'like' | 'dislike') => {
+    const toVoteState = voteState !== button ? button : 'none';
+
     apiService.voteOnEntry({
       id: entry.id,
       fromVoteState: entry.voteState,
-      toVoteState: voteState !== 'like' ? 'like' : 'none',
+      toVoteState,
     });
-    setVoted(voteState !== 'like' ? 'like' : undefined);
-  };
-  const onDislike = () => {
-    apiService.voteOnEntry({
-      id: entry.id,
-      fromVoteState: entry.voteState,
-      toVoteState: voteState !== 'dislike' ? 'dislike' : 'none',
-    });
-    setVoted(voteState !== 'dislike' ? 'dislike' : undefined);
+    setVoteState(voteState !== button ? button : undefined);
+
+    const voteCountChange = calculateVoteCountChange(voteState, toVoteState);
+    setVoteCount(voteCount + voteCountChange);
   };
 
   return (
     <Card.Grid key={entry.id} title={entry.title} className={classNames(styles.entry, { [styles.compact]: compact })}>
 
-      <Vote state={voteState} voteCount={entry.voteCount} onLike={onLike} onDislike={onDislike}/>
+      <Vote state={voteState} voteCount={voteCount} onLike={() => onVote('like')} onDislike={() => onVote('dislike')}/>
 
       {/* Main area */}
       <div className={styles.entryContent}>

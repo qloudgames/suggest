@@ -1,4 +1,5 @@
 import { VoteState } from 'common/types';
+import { calculateVoteCountChange } from 'common/util';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -48,19 +49,4 @@ export function routeVoteOnComment(server: FastifyInstance) {
     res.code(200);
     // don't return any body
   });
-}
-
-export function calculateVoteCountChange(fromState: VoteState, toState: VoteState) {
-  return voteStateToCount(toState) - voteStateToCount(fromState);
-}
-
-function voteStateToCount(state: VoteState) {
-  switch (state) {
-    case 'like':
-      return 1;
-    case 'dislike':
-      return -1;
-    default:
-      return 0;
-  }
 }

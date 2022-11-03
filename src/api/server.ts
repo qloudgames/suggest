@@ -12,6 +12,8 @@ const server: FastifyInstance = Fastify({
 server.register(databaseConnector);
 server.register(routeEntry);
 
+const port = 3000;
+
 async function main() {
 
   await server.register(cors, {
@@ -19,7 +21,7 @@ async function main() {
   });
 
   try {
-    await server.listen({ port: 3000, host: '0.0.0.0' });
+    await server.listen({ port, host: '0.0.0.0' });
 
     const address = server.server.address();
     const addressStr = typeof address === 'string'

@@ -4,9 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Suggestions</title>
-    <link href="http://fonts.cdnfonts.com/css/raleway-5" rel="stylesheet">
+    <link rel="preload" as="font" href="/raleway.woff2" type="font/woff2" crossorigin="anonymous">
     <style>
-        @import url('http://fonts.cdnfonts.com/css/raleway-5');
+        @font-face {
+          font-family: 'Raleway';
+          src: url('/raleway.woff2');
+          font-weight: normal;
+          font-style: normal;
+        }
+
         * {
             font-family: 'Raleway', sans-serif;
         }

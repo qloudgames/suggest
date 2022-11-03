@@ -26,11 +26,6 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       voteState: this.getVoteStateForEntry(e.id),
     }));
 
-    if (this.cachedGetEntries && this.cachedGetEntries.findIndex(e => e.id === 1) !== -1) {
-      const theVoteState = this.cachedGetEntries.find(e => e.id === 1).voteState;
-      console.log('ApiClient.getEntries() returning! voteState for entry 1 is: ' + theVoteState);
-    }
-
     return this.cachedGetEntries;
   }
 
@@ -93,7 +88,6 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     }
     
     this.updateVoteStateForEntry(req.id, req.toVoteState);
-    console.log('set vote state for entry ' + req.id + ' to: ' + req.toVoteState);
 
     this.clearGetEntriesCache();
   }

@@ -82,9 +82,6 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
   private readonly loadEntries = () => {
     const { apiService } = this.props;
 
-    // hacky fix
-    // this.setState({ entries: [] });
-
     apiService.getEntries().then(entries => {
       this.setState({ entries });
     });

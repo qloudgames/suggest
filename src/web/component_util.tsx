@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './component_util.module.css';
 import * as classNames from 'classnames';
-import { Spin } from 'antd';
+import { PageHeader, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
 export const InlineSeparator = () => <span style={{ color: 'black', textDecoration: 'bold' }}>&nbsp;|&nbsp;</span>;
@@ -18,3 +18,14 @@ export const LoadingSpinner = () => (
     <Spin className={styles.load} indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
   </div>
 );
+
+export const Back = () => {
+  return (
+    <PageHeader
+      className={styles.back}
+      title={
+        <StyledLink to="/" enabled={true}>⬅️ Back</StyledLink>
+      }
+    />
+  );
+};

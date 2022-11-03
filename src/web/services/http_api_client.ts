@@ -1,32 +1,40 @@
-import { AddCommentRequest, AddEntryRequest, AddEntryResponse, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 import { ApiService } from './api_service';
 import { LocalStorageService } from './local_storage_service';
 
 export class HttpApiClient extends LocalStorageService implements ApiService {
 
-  private lastGetEntriesTimestamp: number = 0;
-  private cachedGetEntries: EntryData[] = [];
+  private cachedEntries: {
+    hot: { entries?: EntryData[], lastTimestamp: number },
+    top: { entries?: EntryData[], lastTimestamp: number },
+    new: { entries?: EntryData[], lastTimestamp: number },
+  } = {
+    hot: { lastTimestamp: 0 },
+    top: { lastTimestamp: 0 },
+    new: { lastTimestamp: 0 },
+  };
 
   constructor(private readonly baseUrl: string) {
     super();
   }
 
-  async getEntries(): Promise<EntryData[]> {
+  async getEntries(category: Category): Promise<EntryData[]> {
+    const cache = this.cachedEntries[category];
     const now = Date.now();
-    if (now - this.lastGetEntriesTimestamp < 10000) {
+    if (now - cache.lastTimestamp < 10000 && cache.entries != null) {
       // prevent firing GetEntries request more than once every 10 seconds
-      return this.cachedGetEntries;
+      return cache.entries;
     }
-    this.lastGetEntriesTimestamp = now;
+    cache.lastTimestamp = now;
 
-    const res = await fetch(this.baseUrl);
+    const res = await fetch(`${this.baseUrl}/list/${category}`);
     const entries: EntryDataFromServer[] = await res.json();
-    this.cachedGetEntries = entries.map(e => ({
+    cache.entries = entries.map(e => ({
       ...e,
       voteState: this.getVoteStateForEntry(e.id),
     }));
 
-    return this.cachedGetEntries;
+    return cache.entries;
   }
 
   async getEntryDetails(entryId: number): Promise<FullEntryData> {
@@ -57,7 +65,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     const { entryId } = await res.json();
     this.updateVoteStateForEntry(entryId, 'like');
 
-    this.clearGetEntriesCache();
+    this.clearAllEntriesCaches();
 
     return { entryId };
   }
@@ -74,7 +82,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     });
     const { commentId } = await res.json();
     this.updateVoteStateForComment(entryId, commentId, 'like');
-    this.clearGetEntriesCache();
+    this.clearAllEntriesCaches();
   }
 
   async voteOnEntry(req: VoteOnEntryRequest): Promise<void> {
@@ -91,7 +99,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     
     this.updateVoteStateForEntry(req.id, req.toVoteState);
 
-    this.clearGetEntriesCache();
+    this.clearAllEntriesCaches();
   }
 
   async voteOnComment(req: VoteOnCommentRequest): Promise<void> {
@@ -110,8 +118,11 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
   }
 
   /** Clear getEntries() cache whenever we make an action that could affect any data on the homepage's listview */
-  private clearGetEntriesCache(): void {
-    this.lastGetEntriesTimestamp = 0;
-    this.cachedGetEntries = [];
+  private clearAllEntriesCaches(): void {
+    this.cachedEntries = {
+      hot: { lastTimestamp: 0 },
+      top: { lastTimestamp: 0 },
+      new: { lastTimestamp: 0 },
+    };
   }
 }

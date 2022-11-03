@@ -10,5 +10,9 @@
   text-align: center;
 }
 .load {
-  margin-top: 15px;
+  margin-top: 20px;
+}
+
+.back {
+  padding: 12px;
 }

@@ -1,8 +1,8 @@
-import { AddCommentRequest, AddEntryRequest, AddEntryResponse, EntryData, FullEntryData, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, FullEntryData, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 
 export type ApiService = {
 
-  getEntries(): Promise<EntryData[]>;
+  getEntries(category: Category): Promise<EntryData[]>;
 
   getEntryDetails(entryId: number): Promise<FullEntryData>;
 

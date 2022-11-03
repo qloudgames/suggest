@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Card } from 'antd';
 import styles from './entry.module.css';
-import { EntryData, getTimeElapsedText, VoteState } from 'common/types';
+import { EntryData, VoteState } from 'common/types';
 import { InlineSeparator, StyledLink } from './component_util';
 import { Vote } from './vote';
 import * as classNames from 'classnames';
 import { ApiService } from './services/api_service';
-import { calculateVoteCountChange } from 'common/util';
+import { calculateVoteCountChange, getTimeElapsedText } from 'common/util';
 
 type Props = {
   entry: EntryData;

@@ -37,7 +37,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       voteState: this.getVoteStateForEntry(entry.id),
       comments: entry.comments.map(c => ({
         ...c,
-        voteState: this.getVoteStateForComment(c.id),
+        voteState: this.getVoteStateForComment(entry.id, c.id),
       })),
     };
   }
@@ -73,7 +73,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       }),
     });
     const { commentId } = await res.json();
-    this.updateVoteStateForComment(commentId, 'like');
+    this.updateVoteStateForComment(entryId, commentId, 'like');
     this.clearGetEntriesCache();
   }
 
@@ -106,7 +106,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       throw Error(`failed to vote on comment, status came back as: ${res.status}`);
     }
     
-    this.updateVoteStateForComment(req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
+    this.updateVoteStateForComment(req.entryId, req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 
   /** Clear getEntries() cache whenever we make an action that could affect any data on the homepage's listview */

@@ -25,7 +25,7 @@ export class FakeApiService extends LocalStorageService implements ApiService {
       voteState: this.getVoteStateForEntry(entryId),
       comments: getFakeCommentsFor(entryId).map(c => ({
         ...c,
-        voteState: this.getVoteStateForComment(c.id),
+        voteState: this.getVoteStateForComment(entryId, c.id),
       })),
     };
   }
@@ -51,6 +51,6 @@ export class FakeApiService extends LocalStorageService implements ApiService {
 
   async voteOnComment(req: VoteOnCommentRequest): Promise<void> {
     await wait(100);
-    this.updateVoteStateForComment(req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
+    this.updateVoteStateForComment(req.entryId, req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 }

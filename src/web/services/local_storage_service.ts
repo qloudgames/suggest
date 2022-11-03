@@ -24,8 +24,8 @@ export class LocalStorageService {
     this.storage.setItem(`v_${entryId}`, voteState);
   }
 
-  getVoteStateForComment(commentId: number): VoteState {
-    const result = this.storage.getItem(`vc_${commentId}`) as VoteState;
+  getVoteStateForComment(entryId: number, commentId: number): VoteState {
+    const result = this.storage.getItem(`vc_${entryId}_${commentId}`) as VoteState;
     switch (result) {
       case 'like':
       case 'dislike':
@@ -35,8 +35,8 @@ export class LocalStorageService {
     }
   }
 
-  updateVoteStateForComment(commentId: number, voteState: VoteState): void {
-    this.storage.setItem(`vc_${commentId}`, voteState);
+  updateVoteStateForComment(entryId: number, commentId: number, voteState: VoteState): void {
+    this.storage.setItem(`vc_${entryId}_${commentId}`, voteState);
   }
 
   getLocalName(): string {

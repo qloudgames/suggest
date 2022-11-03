@@ -10,10 +10,6 @@
   margin-bottom: 25px;
 }
 
-.back {
-  padding: 12px;
-}
-
 .logo {
   max-width: 40vw;
   min-width: 15vw;
@@ -26,25 +22,6 @@
     max-height: 200px;
     margin-top: 3vh;
   }
-}
-
-.heading {
-  /* */
-}
-
-.submitAlert {
-  text-align: center;
-  padding: 16px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  border-color: white;
-  background-color: rgba(255, 255, 255, 0.95);
-}
-.submitAlertMessage {
-  margin-bottom: 10px;
-}
-.submitAlertButton {
-  /* */
 }
 
 .container {

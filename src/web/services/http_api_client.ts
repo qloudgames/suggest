@@ -1,4 +1,4 @@
-import { AddCommentRequest, AddEntryRequest, AddEntryResponse, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 import { ApiService } from './api_service';
 import { LocalStorageService } from './local_storage_service';
 
@@ -11,7 +11,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     super();
   }
 
-  async getEntries(): Promise<EntryData[]> {
+  async getEntries(category: Category): Promise<EntryData[]> {
     const now = Date.now();
     if (now - this.lastGetEntriesTimestamp < 10000) {
       // prevent firing GetEntries request more than once every 10 seconds
@@ -19,7 +19,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     }
     this.lastGetEntriesTimestamp = now;
 
-    const res = await fetch(this.baseUrl);
+    const res = await fetch(`${this.baseUrl}/${category}`);
     const entries: EntryDataFromServer[] = await res.json();
     this.cachedGetEntries = entries.map(e => ({
       ...e,

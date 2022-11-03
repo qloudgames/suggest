@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Button, Input, Popover } from 'antd';
 import styles from './create.module.css';
-import { Back } from './app';
 import { ApiService } from './services/api_service';
 import { useNavigate } from 'react-router-dom';
-import { LoadingSpinner } from './component_util';
+import { Back, LoadingSpinner } from './component_util';
 import { Bounds } from 'common/bounds';
 
 export const Create = ({ apiService }: { apiService: ApiService }) => {

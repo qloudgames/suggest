@@ -4,11 +4,10 @@ import styles from './details.module.css';
 import { useParams } from 'react-router-dom';
 import { Entry } from './entry';
 import { Vote } from './vote';
-import { Back } from './app';
 import { ApiService } from './services/api_service';
-import { CommentData, FullEntryData, getTimeElapsedText } from 'common/types';
-import { LoadingSpinner } from './component_util';
-import { calculateVoteCountChange } from 'common/util';
+import { CommentData, FullEntryData } from 'common/types';
+import { Back, LoadingSpinner } from './component_util';
+import { calculateVoteCountChange, getTimeElapsedText } from 'common/util';
 import { Bounds } from 'common/bounds';
 
 type CommentFormState = 'show' | 'sending' | 'hidden';

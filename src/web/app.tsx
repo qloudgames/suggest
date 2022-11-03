@@ -109,7 +109,31 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
   }
 }
 
+// react
 const root = createRoot(document.getElementById('root'));
 const apiService: ApiService = new HttpApiClient(apiUrl);
 // const apiService: ApiService = new FakeApiService();
 root.render(<SuggestionsRoot apiService={apiService}/>);
+
+// "trianglify.bundle.js" fetched in html file
+const seed = `${Math.random() * 100_000_000}`;
+function regenerateBackground() {
+  const existing = document.getElementsByClassName('background');
+  if (existing.length > 0) 
+    document.body.removeChild(existing.item(0));
+
+  const opts = {
+    seed,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+  const pattern = (window as any).trianglify(opts);
+  const element = pattern.toCanvas();
+  element.classList.add('background');
+  document.body.appendChild(element);
+}
+
+regenerateBackground();
+window.onresize = () => {
+  regenerateBackground();
+};

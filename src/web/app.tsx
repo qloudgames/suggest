@@ -14,7 +14,7 @@ import { HttpApiClient } from './services/http_api_client';
 import { ApiService } from './services/api_service';
 import { EntryData } from 'common/types';
 
-const apiUrl = '//ideas-api.loftia.gg';
+const apiUrl = window.location.href.includes('localhost:8080') ? '//localhost:3000' : '//ideas-api.loftia.gg';
 
 const { Title } = Typography;
 

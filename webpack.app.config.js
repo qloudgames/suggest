@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/web/app.tsx',
@@ -7,6 +8,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
   },
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -50,12 +52,18 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist/web'),
+    path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'web', 'index.html'),
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.join(__dirname, 'assets', 'favicon.ico'), to: path.join(__dirname, 'dist') },
+        { from: path.join(__dirname, 'assets', 'raleway.woff2'), to: path.join(__dirname, 'dist') },
+      ],
     }),
   ],
   stats: {

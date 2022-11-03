@@ -5,6 +5,7 @@ import { Back } from './app';
 import { ApiService } from './services/api_service';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from './component_util';
+import { Bounds } from 'common/bounds';
 
 export const Create = ({ apiService }: { apiService: ApiService }) => {
   const [title, setTitle] = React.useState('');
@@ -28,13 +29,13 @@ export const Create = ({ apiService }: { apiService: ApiService }) => {
   };
 
   const create = (): void => {
-    if (name.length < 3) {
+    if (name.length < Bounds.name.min) {
       setError('your name is too short');
       setErrorOpen(true);
       setTimeout(() => setErrorOpen(false), 1000);
       return;
     }
-    if (title.length < 10) {
+    if (title.length < Bounds.entry.title.min) {
       setError('your title is too short');
       setErrorOpen(true);
       setTimeout(() => setErrorOpen(false), 1000);
@@ -67,21 +68,21 @@ export const Create = ({ apiService }: { apiService: ApiService }) => {
           prefix={<span style={{ fontWeight: 600 }}>title: </span>}
           className={styles.title}
           placeholder="title (summary of your idea)"
-          maxLength={30}/>
+          maxLength={Bounds.entry.title.max}/>
         <Input.TextArea
           value={body}
           onChange={onBodyChange}
           className={styles.body}
           rows={4}
           placeholder="(optional) describe your idea in a bit more detail here!"
-          maxLength={3000} />
+          maxLength={Bounds.entry.description.max} />
         <Input
           value={name}
           onChange={onNameChange}
           prefix={<span style={{ fontWeight: 600 }}>your name: </span>}
           className={styles.name}
           placeholder="your display name"
-          maxLength={30}/>
+          maxLength={Bounds.name.max}/>
 
         {sending ? (
           <LoadingSpinner/>

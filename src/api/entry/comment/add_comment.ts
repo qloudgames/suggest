@@ -21,7 +21,6 @@ export function routeAddComment(server: FastifyInstance) {
     const { entryId, name, comment } = JSON.parse(req.body as string) as AddCommentRequest;
 
     const id = await getNextCommentId(collection, entryId);
-    server.log.warn(`created comment with comment id = ${id}`);
     if (id === -1) {
       res.code(404);
       return;
@@ -48,8 +47,7 @@ export function routeAddComment(server: FastifyInstance) {
       }
     );
 
-    res.code(200);
-    // don't return any body
+    return JSON.stringify({ commentId: id });
   });
 }
 

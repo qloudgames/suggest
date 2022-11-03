@@ -20,11 +20,14 @@ export function routeCreateEntry(server: FastifyInstance) {
 
     const id = await getNextCounter(server, 'entryId');
 
+    // prevent more than two newlines
+    const sanitizedBody = sanitize(body);
+
     const document: EntryDataFromServer = {
       id,
       title,
       author: name,
-      description: body,
+      description: sanitizedBody,
       timestamp: Date.now(),
       voteCount: 1, // author automatically upvotes
       numComments: 0,
@@ -36,4 +39,11 @@ export function routeCreateEntry(server: FastifyInstance) {
 
     return JSON.stringify({ entryId: id });
   });
+}
+
+function sanitize(body: string): string {
+  while (body.includes('\n\n\n')) {
+    body = body.replace('\n\n\n', '\n\n');
+  }
+  return body;
 }

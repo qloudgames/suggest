@@ -63,15 +63,21 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
 const CompactMaxLength = 200;
 
 function createEntryDescription(entry: EntryData, compact: boolean) {
-  if (!compact || entry.description.length <= CompactMaxLength) {
-    return entry.description;
-  }
+  if (compact) {
+    if (entry.description.length <= CompactMaxLength) {
+      // no newlines/paragraphs
+      return entry.description;
+    }
 
-  // split into excerpt, and "read more..."
-  return (
-    <>
-      <>{entry.description.substring(0, 201)}...</>
-      <span className={styles.readMore}>[read more]</span>
-    </>
-  )
+    // split into excerpt, and "read more..."
+    return (
+      <>
+        <>{entry.description.substring(0, 201)}...</>
+        <span className={styles.readMore}>[read more]</span>
+      </>
+    );
+  };
+
+  // with formatting
+  return <span style={{ whiteSpace: 'pre-line' }}>{entry.description}</span>;
 }

@@ -9,6 +9,7 @@ import { ApiService } from './services/api_service';
 import { CommentData, FullEntryData, getTimeElapsedText } from 'common/types';
 import { LoadingSpinner } from './component_util';
 import { calculateVoteCountChange } from 'common/util';
+import { Bounds } from 'common/bounds';
 
 type CommentFormState = 'show' | 'sending' | 'hidden';
 
@@ -63,13 +64,13 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
   };
   
   const addComment = (): void => {
-    if (name.length < 3) {
+    if (name.length < Bounds.name.min) {
       setCommentError('your name is too short');
       setCommentErrorOpen(true);
       setTimeout(() => setCommentErrorOpen(false), 1000);
       return;
     }
-    if (commentText.length < 10) {
+    if (commentText.length < Bounds.comment.min) {
       setCommentError('your comment is too short');
       setCommentErrorOpen(true);
       setTimeout(() => setCommentErrorOpen(false), 1000);
@@ -111,14 +112,14 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                 className={styles.commentBox}
                 rows={4}
                 placeholder="what are your thoughts about this idea?"
-                maxLength={1000} />
+                maxLength={Bounds.comment.max} />
               <Input
                 prefix={<span style={{ fontWeight: 600 }}>name: </span>}
                 value={name}
                 onChange={onNameChange}
                 className={styles.commentName}
                 placeholder="your display name"
-                maxLength={30}/>
+                maxLength={Bounds.name.max}/>
               <Popover
                 content={
                   <span>{commentError}</span>

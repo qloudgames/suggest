@@ -3,6 +3,7 @@
   "scripts": {
     "start": "webpack serve --mode=development --config ./webpack.app.config.js",
     "build-web": "webpack --mode=production --config ./webpack.app.config.js",
+    "build-server": "webpack --mode=development --config ./webpack.server.config.js",
     "server": "webpack --mode=development --config ./webpack.server.config.js && node ./dist/server.js"
   },
   "dependencies": {

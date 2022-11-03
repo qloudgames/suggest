@@ -25,6 +25,12 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       ...e,
       voteState: this.getVoteStateForEntry(e.id),
     }));
+
+    if (this.cachedGetEntries && this.cachedGetEntries.findIndex(e => e.id === 1) !== -1) {
+      const theVoteState = this.cachedGetEntries.find(e => e.id === 1).voteState;
+      console.log('ApiClient.getEntries() returning! voteState for entry 1 is: ' + theVoteState);
+    }
+
     return this.cachedGetEntries;
   }
 
@@ -56,7 +62,6 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     const { entryId } = await res.json();
     this.updateVoteStateForEntry(entryId, 'like');
 
-    // also clear getEntries() cache because we added a new entry that should be displayed on home/listview
     this.clearGetEntriesCache();
 
     return { entryId };
@@ -72,6 +77,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
         comment,
       }),
     });
+    this.clearGetEntriesCache();
   }
 
   async voteOnEntry(req: VoteOnEntryRequest): Promise<void> {
@@ -86,9 +92,9 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       throw Error(`failed to vote on entry, status came back as: ${res.status}`);
     }
     
-    this.updateVoteStateForEntry(req.id, req.toVoteState !== 'none' ? req.toVoteState : undefined);
+    this.updateVoteStateForEntry(req.id, req.toVoteState);
+    console.log('set vote state for entry ' + req.id + ' to: ' + req.toVoteState);
 
-    // also clear getEntries() cache because we modified how this entry should be displayed on home/listview
     this.clearGetEntriesCache();
   }
 
@@ -107,6 +113,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     this.updateVoteStateForComment(req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 
+  /** Clear getEntries() cache whenever we make an action that could affect any data on the homepage's listview */
   private clearGetEntriesCache(): void {
     this.lastGetEntriesTimestamp = 0;
     this.cachedGetEntries = [];

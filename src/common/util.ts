@@ -14,3 +14,11 @@ function voteStateToCount(state: VoteState) {
       return 0;
   }
 }
+
+export function sanitizeText_Newlines(body: string): string {
+  body = body.trim();
+  while (body.includes('\n\n\n')) {
+    body = body.replace('\n\n\n', '\n\n');
+  }
+  return body;
+}

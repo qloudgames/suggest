@@ -169,7 +169,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                       dislikeEmoji="👎"
                     />
                   }
-                  content={comment.comment}
+                  content={<span style={{ whiteSpace: 'pre-line' }}>{comment.comment}</span>}
                   datetime={<span>9 hours ago</span>}
                 />
             ))}

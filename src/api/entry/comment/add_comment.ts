@@ -1,4 +1,5 @@
 import { AddCommentRequest, CommentDataFromServer } from 'common/types';
+import { sanitizeText_Newlines } from 'common/util';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { Collection, Document } from 'mongodb';
 
@@ -29,7 +30,7 @@ export function routeAddComment(server: FastifyInstance) {
     const commentDocument: CommentDataFromServer = {
       id,
       author: name,
-      comment,
+      comment: sanitizeText_Newlines(comment),
       timestamp: Date.now(),
       voteCount: 1,
     };

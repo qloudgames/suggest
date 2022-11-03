@@ -16,9 +16,17 @@ type Props = {
 }
 
 export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props) => {
-  //
   const [voteState, setVoteState] = React.useState<VoteState>(entry.voteState);
   const [voteCount, setVoteCount] = React.useState<number>(entry.voteCount);
+
+  // hack to fix issue with:
+  // - changing vote state on 'details' page, then flicking back to listview, would result in outdated votestate
+  //   on listview
+  // TODO: not sure why this bug occurs, need to come back and fix this without this hack
+  if (voteState !== entry.voteState) {
+    setVoteState(entry.voteState);
+    setVoteCount(entry.voteCount);
+  }
 
   const onVote = (button: 'like' | 'dislike') => {
     const toVoteState = voteState !== button ? button : 'none';
@@ -28,10 +36,13 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
       fromVoteState: entry.voteState,
       toVoteState,
     });
-    setVoteState(voteState !== button ? button : undefined);
+
+    entry.voteState = voteState !== button ? button : undefined;
+    setVoteState(entry.voteState);
 
     const voteCountChange = calculateVoteCountChange(voteState, toVoteState);
-    setVoteCount(voteCount + voteCountChange);
+    entry.voteCount = voteCount + voteCountChange;
+    setVoteCount(entry.voteCount);
   };
 
   return (

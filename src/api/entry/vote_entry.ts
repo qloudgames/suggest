@@ -14,7 +14,6 @@ const opts: RouteShorthandOptions = {
 
 type Params = {
   entryId: string;
-  commentId: string;
   fromVoteState: VoteState;
   toVoteState: VoteState;
 };
@@ -23,14 +22,13 @@ type ReqBody = {
   toVoteState: VoteState;
 }
 
-export function routeVoteOnComment(server: FastifyInstance) {
+export function routeVoteOnEntry(server: FastifyInstance) {
   const collection = server.mongo.db.collection('entries');
 
-  server.post('/entry/:entryId/comment/:commentId/vote', {}, async (req: FastifyRequest, res: FastifyReply) => {
+  server.post('/entry/:entryId/vote', {}, async (req: FastifyRequest, res: FastifyReply) => {
 
-    const { entryId: _entryId, commentId: _commentId } = req.params as Params;
+    const { entryId: _entryId } = req.params as Params;
     const entryId = parseInt(_entryId);
-    const commentId = parseInt(_commentId);
     const { fromVoteState = 'none', toVoteState = 'none' } = JSON.parse(req.body as string) as ReqBody;
 
     const voteChange = calculateVoteCountChange(fromVoteState, toVoteState);
@@ -38,10 +36,10 @@ export function routeVoteOnComment(server: FastifyInstance) {
       return;
     
     await collection.updateOne(
-      { id: entryId, "comments.id": commentId },
+      { id: entryId },
       {
         $inc: {
-          "comments.$.voteCount": voteChange,
+          voteCount: voteChange,
         },
       }
     );

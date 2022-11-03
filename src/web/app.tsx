@@ -79,8 +79,12 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
     };
   }
 
-  private readonly maybeLoadEntries = () => {
+  private readonly loadEntries = () => {
     const { apiService } = this.props;
+
+    // hacky fix
+    // this.setState({ entries: [] });
+
     apiService.getEntries().then(entries => {
       this.setState({ entries });
     });
@@ -96,10 +100,10 @@ class SuggestionsRoot extends React.Component<Props, MainStateInternal> {
           </StyledLink>
           <Card className={styles.container}>
             <Routes>
-              <Route path="/" element={<Home state={this.state} apiService={apiService} onMount={this.maybeLoadEntries}/>} />
+              <Route path="/" element={<Home state={this.state} apiService={apiService} onMount={this.loadEntries}/>} />
               <Route path="details/:entryId" element={<Details apiService={apiService}/>} />
               <Route path="/new" element={<Create apiService={apiService}/>}/>
-              <Route path="*" element={<Home state={this.state} apiService={apiService} onMount={this.maybeLoadEntries}/>}/>
+              <Route path="*" element={<Home state={this.state} apiService={apiService} onMount={this.loadEntries}/>}/>
             </Routes>
           </Card>
         </div>

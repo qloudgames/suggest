@@ -6,6 +6,7 @@ import { InlineSeparator, StyledLink } from './component_util';
 import { Vote } from './vote';
 import * as classNames from 'classnames';
 import { ApiService } from './services/api_service';
+import { calculateVoteCountChange } from 'common/util';
 
 type Props = {
   entry: EntryData;
@@ -15,29 +16,39 @@ type Props = {
 }
 
 export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props) => {
-  //
-  const [voteState, setVoted] = React.useState<VoteState>(entry.voteState);
-  const onLike = () => {
+  const [voteState, setVoteState] = React.useState<VoteState>(entry.voteState);
+  const [voteCount, setVoteCount] = React.useState<number>(entry.voteCount);
+
+  // hack to fix issue with:
+  // - changing vote state on 'details' page, then flicking back to listview, would result in outdated votestate
+  //   on listview
+  // TODO: not sure why this bug occurs, need to come back and fix this without this hack
+  if (voteState !== entry.voteState) {
+    setVoteState(entry.voteState);
+    setVoteCount(entry.voteCount);
+  }
+
+  const onVote = (button: 'like' | 'dislike') => {
+    const toVoteState = voteState !== button ? button : 'none';
+
     apiService.voteOnEntry({
       id: entry.id,
       fromVoteState: entry.voteState,
-      toVoteState: voteState !== 'like' ? 'like' : 'none',
+      toVoteState,
     });
-    setVoted(voteState !== 'like' ? 'like' : undefined);
-  };
-  const onDislike = () => {
-    apiService.voteOnEntry({
-      id: entry.id,
-      fromVoteState: entry.voteState,
-      toVoteState: voteState !== 'dislike' ? 'dislike' : 'none',
-    });
-    setVoted(voteState !== 'dislike' ? 'dislike' : undefined);
+
+    entry.voteState = voteState !== button ? button : undefined;
+    setVoteState(entry.voteState);
+
+    const voteCountChange = calculateVoteCountChange(voteState, toVoteState);
+    entry.voteCount = voteCount + voteCountChange;
+    setVoteCount(entry.voteCount);
   };
 
   return (
     <Card.Grid key={entry.id} title={entry.title} className={classNames(styles.entry, { [styles.compact]: compact })}>
 
-      <Vote state={voteState} voteCount={entry.voteCount} onLike={onLike} onDislike={onDislike}/>
+      <Vote state={voteState} voteCount={voteCount} onLike={() => onVote('like')} onDislike={() => onVote('dislike')}/>
 
       {/* Main area */}
       <div className={styles.entryContent}>
@@ -63,15 +74,21 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
 const CompactMaxLength = 200;
 
 function createEntryDescription(entry: EntryData, compact: boolean) {
-  if (!compact || entry.description.length <= CompactMaxLength) {
-    return entry.description;
-  }
+  if (compact) {
+    if (entry.description.length <= CompactMaxLength) {
+      // no newlines/paragraphs
+      return entry.description;
+    }
 
-  // split into excerpt, and "read more..."
-  return (
-    <>
-      <>{entry.description.substring(0, 201)}...</>
-      <span className={styles.readMore}>[read more]</span>
-    </>
-  )
+    // split into excerpt, and "read more..."
+    return (
+      <>
+        <>{entry.description.substring(0, 201)}...</>
+        <span className={styles.readMore}>[read more]</span>
+      </>
+    );
+  };
+
+  // with formatting
+  return <span style={{ whiteSpace: 'pre-line' }}>{entry.description}</span>;
 }

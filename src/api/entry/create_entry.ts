@@ -1,5 +1,6 @@
 import { getNextCounter } from 'api/database';
 import { AddEntryRequest, EntryDataFromServer } from 'common/types';
+import { sanitizeText_Newlines } from 'common/util';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -24,7 +25,7 @@ export function routeCreateEntry(server: FastifyInstance) {
       id,
       title,
       author: name,
-      description: body,
+      description: sanitizeText_Newlines(body),
       timestamp: Date.now(),
       voteCount: 1, // author automatically upvotes
       numComments: 0,

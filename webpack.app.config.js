@@ -8,7 +8,8 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
   },
-  devtool: 'inline-source-map',
+  // TODO: split out production config from dev config!
+  // devtool: 'inline-source-map',
   module: {
     rules: [
       {

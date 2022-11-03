@@ -67,7 +67,7 @@ export const Create = ({ apiService }: { apiService: ApiService }) => {
           prefix={<span style={{ fontWeight: 600 }}>title: </span>}
           className={styles.title}
           placeholder="title (summary of your idea)"
-          maxLength={30}/>
+          maxLength={100}/>
         <Input.TextArea
           value={body}
           onChange={onBodyChange}

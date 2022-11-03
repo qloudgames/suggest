@@ -13,8 +13,49 @@ export type EntryData = {
 
 export type EntryDataFromServer = Omit<EntryData, 'voteState'>;
 
-export function getEntryTimeElapsed(entry: EntryData) {
-  return '12 days';
+export function getTimeElapsedText(timestamp: number) {
+  let diff = Date.now() - timestamp;
+  if (diff < 0) {
+    // can occur if os clock is inaccurate
+    diff = 0;
+  }
+
+  if (diff < 1000) {
+    // less than 1 second ago
+    return 'just now';
+  }
+
+  const seconds = diff / 1000;
+  if (seconds < 60) {
+    return `${Math.floor(seconds)} sec ago`;
+  }
+  
+  const minutes = seconds / 60;
+  if (minutes < 60) {
+    return `${Math.floor(minutes)} min${minutes >= 2 ? 's' : ''} ago`;
+  }
+
+  const hours = minutes / 60;
+  if (hours < 24) {
+    return `${Math.floor(hours)} hour${hours >= 2 ? 's' : ''} ago`;
+  }
+
+  const days = hours / 24;
+  if (days < 7) {
+    return `${Math.floor(days)} day${days >= 2 ? 's' : ''} ago`;
+  }
+
+  const weeks = days / 7;
+  const months = days / 30;
+  if (months < 1) {
+    return `${Math.floor(weeks)} week${weeks >= 2 ? 's' : ''} ago`;
+  }
+  if (months < 12) {
+    return `${Math.round(months)} month${months >= 2 ? 's' : ''} ago`;
+  }
+
+  const years = days / 365;
+  return `${Math.floor(years)} years ago`;
 }
 
 export type CommentData = {

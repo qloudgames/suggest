@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Card } from 'antd';
 import styles from './entry.module.css';
-import { EntryData, getEntryTimeElapsed, VoteState } from 'common/types';
+import { EntryData, getTimeElapsedText, VoteState } from 'common/types';
 import { InlineSeparator, StyledLink } from './component_util';
 import { Vote } from './vote';
 import * as classNames from 'classnames';
@@ -61,7 +61,7 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
           </div>
         </StyledLink>
         <div className={styles.metadata}>
-          By {entry.author}, {getEntryTimeElapsed(entry)} ago
+          By {entry.author}, {getTimeElapsedText(entry.timestamp)}
           <InlineSeparator/>
           <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>{entry.numComments} comment{entry.numComments !== 1 && 's'}</StyledLink>
         </div>

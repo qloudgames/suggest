@@ -6,7 +6,7 @@ import { Entry } from './entry';
 import { Vote } from './vote';
 import { Back } from './app';
 import { ApiService } from './services/api_service';
-import { CommentData, FullEntryData } from 'common/types';
+import { CommentData, FullEntryData, getTimeElapsedText } from 'common/types';
 import { LoadingSpinner } from './component_util';
 import { calculateVoteCountChange } from 'common/util';
 
@@ -170,7 +170,7 @@ export const Details = ({ apiService }: { apiService: ApiService }) => {
                     />
                   }
                   content={<span style={{ whiteSpace: 'pre-line' }}>{comment.comment}</span>}
-                  datetime={<span>9 hours ago</span>}
+                  datetime={<span>{getTimeElapsedText(comment.timestamp)}</span>}
                 />
             ))}
             {entry.comments.length === 0 && (

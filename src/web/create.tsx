@@ -5,11 +5,14 @@ import { ApiService } from './services/api_service';
 import { useNavigate } from 'react-router-dom';
 import { Back, LoadingSpinner } from './component_util';
 import { Bounds } from 'common/bounds';
+import { TagsList } from './tags_list';
+import { MaxTagsPerEntry, TagType } from 'common/tags';
 
 export const Create = ({ apiService }: { apiService: ApiService }) => {
   const [title, setTitle] = React.useState('');
   const [name, setName] = React.useState(apiService.getLocalName());
   const [body, setBody] = React.useState('');
+  const [tags, setTags] = React.useState<TagType[]>([]);
   const [error, setError] = React.useState<string | undefined>(undefined);
   const [errorOpen, setErrorOpen] = React.useState<boolean>(false);
   const [sending, setSending] = React.useState(false);
@@ -47,6 +50,7 @@ export const Create = ({ apiService }: { apiService: ApiService }) => {
       title,
       body,
       name,
+      tags,
     }).then(({ entryId }) => {
       // go to newly-created post
       navigate(`/details/${entryId}`);
@@ -82,6 +86,15 @@ export const Create = ({ apiService }: { apiService: ApiService }) => {
           className={styles.name}
           placeholder="your display name"
           maxLength={Bounds.name.max}/>
+
+        <div className={styles.tags}>
+          <TagsList
+            mode="edit"
+            tags={tags}
+            tagsLimit={MaxTagsPerEntry}
+            updateTags={setTags}
+            messageWhenEmpty="Why not add some tags to your suggestion? 😊"/>
+        </div>
 
         {sending ? (
           <LoadingSpinner/>

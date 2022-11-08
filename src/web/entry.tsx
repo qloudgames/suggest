@@ -7,15 +7,17 @@ import { Vote } from './vote';
 import * as classNames from 'classnames';
 import { ApiService } from './services/api_service';
 import { calculateVoteCountChange, getTimeElapsedText } from 'common/util';
+import { TagsList } from './tags_list';
 
 type Props = {
   entry: EntryData;
   apiService: ApiService,
   compact?: boolean;
   enableLinks?: boolean;
+  displayTags?: boolean;
 }
 
-export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props) => {
+export const Entry = ({ entry, apiService, compact = true, enableLinks, displayTags = true }: Props) => {
   const [voteState, setVoteState] = React.useState<VoteState>(entry.voteState);
   const [voteCount, setVoteCount] = React.useState<number>(entry.voteCount);
 
@@ -52,14 +54,21 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks }: Props)
 
       {/* Main area */}
       <div className={styles.entryContent}>
-        <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>
-          <div className={styles.title}>
-            {entry.title}
+        
+        <div className={styles.entryMain}>
+          <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>
+            <div className={styles.title}>
+              {entry.title}
+            </div>
+            <div className={styles.description}>
+              {createEntryDescription(entry, compact)}
+            </div>
+          </StyledLink>
+          <div className={styles.tags}>
+            <TagsList mode="view" tags={entry.tags} updateTags={() => undefined}/>
           </div>
-          <div className={styles.description}>
-            {createEntryDescription(entry, compact)}
-          </div>
-        </StyledLink>
+        </div>
+
         <div className={styles.metadata}>
           By {entry.author}, {getTimeElapsedText(entry.timestamp)}
           <InlineSeparator/>

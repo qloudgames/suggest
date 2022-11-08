@@ -23,3 +23,8 @@
 .submitAlertButton {
   /* */
 }
+
+.noResults {
+  margin: 2vh;
+  text-align: center;
+}

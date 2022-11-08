@@ -43,6 +43,7 @@ export function routeGetEntry(server: FastifyInstance) {
       timestamp,
       voteCount,
       comments,
+      tags = [], // backwards-compat
     } = result;
     const entry: FullEntryDataFromServer = {
       id,
@@ -51,8 +52,9 @@ export function routeGetEntry(server: FastifyInstance) {
       description,
       timestamp,
       voteCount,
+      tags,
       comments: comments.map(({ id, author, timestamp, comment, voteCount: commentVoteCount }: any) => ({
-        // remove _id
+        // intentionally omitting _id
         id,
         author,
         timestamp,

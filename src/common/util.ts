@@ -1,3 +1,4 @@
+import { TagType } from './tags';
 import { VoteState } from './types';
 
 export function calculateVoteCountChange(fromState: VoteState, toState: VoteState) {
@@ -13,6 +14,10 @@ function voteStateToCount(state: VoteState) {
     default:
       return 0;
   }
+}
+
+export function satisfiesTagFilter(tags: TagType[], filters: TagType[]) {
+  return filters.length === 0 || tags.find(tag => filters.includes(tag)) != null;
 }
 
 export function sanitizeText_Newlines(body: string): string {

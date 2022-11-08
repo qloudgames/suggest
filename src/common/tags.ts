@@ -10,6 +10,8 @@ export const AllTags = [
   'other',
 ] as const;
 
+export const MaxTagsPerEntry = 5;
+
 export type TagType = typeof AllTags[number];
 
 export const TagColors: string[] = [

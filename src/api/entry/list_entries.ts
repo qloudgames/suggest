@@ -79,8 +79,9 @@ export async function routeListEntries(server: FastifyInstance) {
       description,
       timestamp,
       voteCount,
+      tags = [], // backwards-compat
       
-      // mutate these
+      // these will be mutated before sending in response (see below)
       comments,
     }) => ({
       id,
@@ -89,6 +90,9 @@ export async function routeListEntries(server: FastifyInstance) {
       description,
       timestamp,
       voteCount,
+      tags,
+
+      // mutate
       numComments: comments.length,
     }));
 

@@ -6,7 +6,8 @@ import { LoadingSpinner, StyledLink } from './component_util';
 import { ApiService } from './services/api_service';
 import styles from './home.module.css';
 import { TagsList } from './tags_list';
-import { AllTags } from 'common/tags';
+import { AllTags, TagType } from 'common/tags';
+import { satisfiesTagFilter } from 'common/util';
 
 const { Title } = Typography;
 
@@ -23,18 +24,24 @@ export type MainState = {
   },
 };
 
-export const Home = ({ state, apiService, onMount, onCategoryChange }: {
+export const Home = ({ state, apiService, onMount, onCategoryChange, onSearchTagsChange }: {
   state: MainState,
   apiService: ApiService,
   onMount(): void,
   onCategoryChange(category: Category): void,
+  onSearchTagsChange(newTags: TagType[]): void,
 }) => {
 
   React.useEffect(() => onMount(), []);
 
-  const [tags, setTags] = React.useState([...AllTags]);
+  const [tags, setTags] = React.useState<TagType[]>([]);
 
-  const entries = state.entries[state.selectedCategory];
+  const updateTags = (newTags: TagType[]) => {
+    setTags(newTags);
+    onSearchTagsChange(newTags);
+  };
+
+  const entries = state.entries[state.selectedCategory]?.filter(entry => satisfiesTagFilter(entry.tags, tags));
 
   return (
     <>
@@ -83,13 +90,16 @@ export const Home = ({ state, apiService, onMount, onCategoryChange }: {
         ]}
       />
 
-      <TagsList mode="search" tags={tags} updateTags={setTags}/>
+      <TagsList mode="search" tags={tags} updateTags={updateTags}/>
 
+      {entries == null && (
+        <LoadingSpinner/>
+      )}
       {entries && entries.map(entry => (
         <Entry key={entry.id} entry={entry} apiService={apiService} enableLinks={true}/>
       ))}
-      {entries == null && (
-        <LoadingSpinner/>
+      {entries && entries.length === 0 && (
+        <div className={styles.noResults}>No results were found 😔</div>
       )}
     </>
   );

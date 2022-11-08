@@ -4,8 +4,7 @@
   background: rgba(255,255,255, 0.8);
   margin: 2vh 0;
   border-radius: 15px;
-  min-height: 100px;
-  padding: 18px 24px;
+  padding: 18px 24px 12px;
 
   display: flex;
   flex-direction: row;
@@ -13,6 +12,10 @@
 }
 .entry:first-child {
   margin-top: 0;
+}
+
+.entryMain {
+  min-height: 70px;
 }
 
 .entry.compact {
@@ -26,7 +29,7 @@
 }
 
 .description {
-  margin-bottom: 40px;
+  min-height: 14px;
 }
 @media (max-width: 480px) {
   .description {
@@ -42,8 +45,7 @@
 }
 
 .metadata {
-  position: absolute;
-  bottom: 15px;
+  margin-top: 5px;
   color: rgba(0, 0, 0, 0.75);
   font-size: 0.9em;
 }

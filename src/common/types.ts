@@ -1,3 +1,5 @@
+import { TagType } from "./tags";
+
 export type VoteState = 'like' | 'dislike' | 'none';
 
 export type EntryData = {
@@ -9,6 +11,7 @@ export type EntryData = {
   voteCount: number;
   voteState: VoteState;
   numComments: number;
+  tags: TagType[],
 };
 
 export type EntryDataFromServer = Omit<EntryData, 'voteState'>;
@@ -39,6 +42,7 @@ export type AddEntryRequest = {
   title: string;
   name: string;
   body: string;
+  tags: TagType[],
 };
 
 export type AddEntryResponse = {

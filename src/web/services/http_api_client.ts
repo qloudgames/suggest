@@ -51,13 +51,14 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
   }
 
   async addEntry(req: AddEntryRequest): Promise<AddEntryResponse> {
-    const { title, name, body } = req;
+    const { title, name, body, tags } = req;
     const res = await fetch(`${this.baseUrl}/entry/create`, {
       method: 'post',
       body: JSON.stringify({
         title,
         name,
         body,
+        tags,
       }),
     });
 

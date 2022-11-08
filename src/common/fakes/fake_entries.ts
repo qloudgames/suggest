@@ -4,7 +4,7 @@ export const FakeEntries: EntryDataFromServer[] = Array(10).fill(0).map((_, i) =
 
 FakeEntries[FakeEntries.length - 1].description = multiply('W', 200);
 
-function createFakeEntry(id: number) {
+function createFakeEntry(id: number): EntryDataFromServer {
   return {
     id,
     author: `Author_${id}`,
@@ -13,6 +13,7 @@ function createFakeEntry(id: number) {
     description: 'We want all of the pets and all of the pet accessories!',
     voteCount: Math.floor(Math.random() * 500),
     numComments: Math.floor(Math.random() * 50),
+    tags: ['gameplay', 'farming'],
   };
 }
 

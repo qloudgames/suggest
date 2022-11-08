@@ -13,6 +13,7 @@ import { HttpApiClient } from './services/http_api_client';
 import { ApiService } from './services/api_service';
 import { Category } from 'common/types';
 import { Home, MainState } from './home';
+import { TagType } from 'common/tags';
 
 const apiUrl = window.location.href.includes('localhost:8080') ? '//localhost:3000' : '//ideas-api.loftia.gg';
 
@@ -59,6 +60,10 @@ class SuggestionsRoot extends React.Component<Props, MainState> {
     }
   };
 
+  private readonly onSearchTagsChange = (newTags: TagType[]) => {
+    // TODO: call API once pagination and server-side support for search tags are implemented
+  };
+
   render() {
     const { apiService } = this.props;
     return (
@@ -69,10 +74,24 @@ class SuggestionsRoot extends React.Component<Props, MainState> {
           </StyledLink>
           <Card className={styles.container}>
             <Routes>
-              <Route path="/" element={<Home state={this.state} apiService={apiService} onMount={this.loadEntries} onCategoryChange={this.onCategoryChange}/>} />
+              <Route path="/" element={
+                <Home
+                  state={this.state}
+                  apiService={apiService}
+                  onMount={this.loadEntries}
+                  onCategoryChange={this.onCategoryChange}
+                  onSearchTagsChange={this.onSearchTagsChange}/>
+              }/>
               <Route path="details/:entryId" element={<Details apiService={apiService}/>} />
               <Route path="/new" element={<Create apiService={apiService}/>}/>
-              <Route path="*" element={<Home state={this.state} apiService={apiService} onMount={this.loadEntries} onCategoryChange={this.onCategoryChange}/>}/>
+              <Route path="*" element={
+                <Home
+                  state={this.state}
+                  apiService={apiService}
+                  onMount={this.loadEntries}
+                  onCategoryChange={this.onCategoryChange}
+                  onSearchTagsChange={this.onSearchTagsChange}/>
+              }/>
             </Routes>
           </Card>
         </div>

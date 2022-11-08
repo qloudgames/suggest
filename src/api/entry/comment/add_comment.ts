@@ -2,6 +2,7 @@ import { AddCommentRequest, CommentDataFromServer } from 'common/types';
 import { sanitizeText_Newlines } from 'common/util';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { Collection, Document } from 'mongodb';
+import { isValidComment, isValidName } from '../../validation';
 
 const opts: RouteShorthandOptions = {
   schema: {
@@ -20,7 +21,16 @@ export function routeAddComment(server: FastifyInstance) {
 
     const { entryId, name, comment } = JSON.parse(req.body as string) as AddCommentRequest;
 
+    // TODO: change to using proper fastify verification
+    if (typeof entryId !== 'string'
+        || !isValidName(name)
+        || !isValidComment(comment)) {
+      res.statusCode = 400;
+      return;
+    }
+    
     const id = await getNextCommentId(collection, entryId);
+    // invalid entryId specified by client
     if (id === -1) {
       res.code(404);
       return;

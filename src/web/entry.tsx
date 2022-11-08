@@ -58,7 +58,7 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks, displayT
         <div className={styles.entryMain}>
           <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>
             <div className={styles.title}>
-              {entry.title}
+              {createEntryTitle(entry, compact)}
             </div>
             <div className={styles.description}>
               {createEntryDescription(entry, compact)}
@@ -80,19 +80,36 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks, displayT
   );
 };
 
-const CompactMaxLength = 200;
+const CompactTitleMaxLength = 60;
+const CompactDescriptionMaxLength = 200;
+
+function createEntryTitle(entry: EntryData, compact: boolean) {
+  const numWideChars = countWideChars(entry.title);
+  const estimatedRenderedLength = entry.title.length + numWideChars;
+  if (compact && estimatedRenderedLength > CompactTitleMaxLength) {
+    const wideCharsInExcerpt = countWideChars(entry.title.substring(0, CompactTitleMaxLength));
+    const fullyShortenedLength = CompactTitleMaxLength - (wideCharsInExcerpt / 2);
+    return entry.title.substring(0, fullyShortenedLength) + '...';
+  }
+
+  return entry.title;
+}
 
 function createEntryDescription(entry: EntryData, compact: boolean) {
   if (compact) {
-    if (entry.description.length <= CompactMaxLength) {
+    const numWideChars = countWideChars(entry.description);
+    const estimatedRenderedLength = entry.description.length + numWideChars;
+    if (estimatedRenderedLength <= CompactDescriptionMaxLength) {
       // no newlines/paragraphs
       return entry.description;
     }
 
     // split into excerpt, and "read more..."
+    const wideCharsInExcerpt = countWideChars(entry.description.substring(0, CompactDescriptionMaxLength));
+    const fullyShortenedLength = CompactDescriptionMaxLength - (wideCharsInExcerpt / 2);
     return (
       <>
-        <>{entry.description.substring(0, 201)}...</>
+        <>{entry.description.substring(0, fullyShortenedLength)}...</>
         <span className={styles.readMore}>[read more]</span>
       </>
     );
@@ -100,4 +117,13 @@ function createEntryDescription(entry: EntryData, compact: boolean) {
 
   // with formatting
   return <span style={{ whiteSpace: 'pre-line' }}>{entry.description}</span>;
+}
+
+function countWideChars(str: string) {
+  let wCount = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i).toLowerCase() === 'w')
+      wCount++;
+  }
+  return wCount;
 }

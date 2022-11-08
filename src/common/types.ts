@@ -1,4 +1,4 @@
-import { TagType } from "./tags";
+import { TagType } from './tags';
 
 export type VoteState = 'like' | 'dislike' | 'none';
 

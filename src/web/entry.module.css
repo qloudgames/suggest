@@ -21,6 +21,11 @@
 .entry.compact {
   max-height: 260px;
 }
+@media (max-width: 767px) {
+  .entry.compact {
+    max-height: 400px;
+  }
+}
 
 .title {
   font-weight: 600;
@@ -31,9 +36,9 @@
 .description {
   min-height: 14px;
 }
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .description {
-    margin-bottom: 50px;
+    min-height: 14px;
   }
 }
 

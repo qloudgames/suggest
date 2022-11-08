@@ -1,5 +1,8 @@
 .tagsList {
   margin-top: 5px;
+}
+
+.tagsList:not(.viewOnly) {
   text-align: center;
 }
 

@@ -39,10 +39,13 @@ export const TagsList = ({ mode, tags, updateTags, messageWhenEmpty, tagsLimit }
   const disableAddTags = addableTags.length === 0 || (tagsLimit && tags.length >= tagsLimit);
 
   return (
-    <div className={styles.tagsList}>
+    <div className={classNames(styles.tagsList, {
+      [styles.viewOnly]: mode === 'view',
+    })}>
       <div>
         {tags.map(tag => (
           <Tag
+              key={tag}
               className={styles.tag}
               color={getColorForTag(tag)}
               closable={mode !== 'view'}

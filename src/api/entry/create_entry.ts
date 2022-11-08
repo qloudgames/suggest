@@ -1,8 +1,8 @@
 import { getNextCounter } from 'api/database';
-import { AllTags, MaxTagsPerEntry, TagType } from 'common/tags';
 import { AddEntryRequest, EntryDataFromServer } from 'common/types';
 import { sanitizeText_Newlines } from 'common/util';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { isValidEntryDescription, isValidEntryTags, isValidEntryTitle, isValidName } from '../validation';
 
 const opts: RouteShorthandOptions = {
   schema: {
@@ -20,8 +20,11 @@ export function routeCreateEntry(server: FastifyInstance) {
   server.post('/entry/create', {}, async (req: FastifyRequest, res: FastifyReply) => {
     const { title, body, name, tags } = JSON.parse(req.body as string) as AddEntryRequest;
 
-    // verification for tags
-    if (!Array.isArray(tags) || tags.length > MaxTagsPerEntry || !tags.every(tag => AllTags.includes(tag))) {
+    // TODO: use proper fastify verification
+    if (!isValidEntryTitle(title)
+        || !isValidEntryDescription(body)
+        || !isValidName(name)
+        || !isValidEntryTags(tags)) {
       res.statusCode = 400;
       return;
     }

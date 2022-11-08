@@ -80,6 +80,8 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks, displayT
   );
 };
 
+// okay I'm not proud of the code here...
+// TODO: fix this crap
 const CompactTitleMaxLength = 60;
 const CompactDescriptionMaxLength = 200;
 

@@ -5,6 +5,8 @@ import { Category, EntryData } from 'common/types';
 import { LoadingSpinner, StyledLink } from './component_util';
 import { ApiService } from './services/api_service';
 import styles from './home.module.css';
+import { TagsList } from './tags_list';
+import { AllTags } from 'common/tags';
 
 const { Title } = Typography;
 
@@ -29,6 +31,8 @@ export const Home = ({ state, apiService, onMount, onCategoryChange }: {
 }) => {
 
   React.useEffect(() => onMount(), []);
+
+  const [tags, setTags] = React.useState([...AllTags]);
 
   const entries = state.entries[state.selectedCategory];
 
@@ -78,6 +82,8 @@ export const Home = ({ state, apiService, onMount, onCategoryChange }: {
           },
         ]}
       />
+
+      <TagsList mode="search" tags={tags} updateTags={setTags}/>
 
       {entries && entries.map(entry => (
         <Entry key={entry.id} entry={entry} apiService={apiService} enableLinks={true}/>

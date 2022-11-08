@@ -1,0 +1,30 @@
+.tagsList {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.tag {
+  border-radius: 10px;
+  background: #fff;
+  padding: 2px 6px;
+  margin-top: 4px;
+}
+
+.actionButton, .resetButton {
+  border-style: dashed;
+  cursor: pointer;
+}
+
+.actionButton.disabled, .resetButton.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.addTagsMenu {
+  border-radius: 10px;
+}
+
+.addTagsMenuItem {
+  padding-top: 0;
+  padding-bottom: 0;
+}

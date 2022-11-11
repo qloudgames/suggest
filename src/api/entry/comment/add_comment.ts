@@ -22,7 +22,7 @@ export function routeAddComment(server: FastifyInstance) {
     const { entryId, name, comment } = JSON.parse(req.body as string) as AddCommentRequest;
 
     // TODO: change to using proper fastify verification
-    if (typeof entryId !== 'string'
+    if (typeof entryId !== 'number'
         || !isValidName(name)
         || !isValidComment(comment)) {
       res.statusCode = 400;

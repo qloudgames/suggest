@@ -2,13 +2,20 @@ import Fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { routeEntry } from './entry/index';
 import { databaseConnector } from './database';
+import { RequestLookupStore } from 'common/RequestLookupStore';
 
 const server: FastifyInstance = Fastify({
   logger: {
     level: 'warn',
   },
 });
-
+server.register(import('@fastify/rate-limit'), {
+  global: false, // setting it on all requests
+  max: 100,
+  ban: 2, // since ban doesn't work well with distributed system, we'll probably need a update our lookup system for this
+  timeWindow: 1000 * 60, // 1 minute 
+  store: RequestLookupStore
+})
 server.register(databaseConnector);
 server.register(routeEntry);
 
@@ -25,8 +32,8 @@ async function main() {
 
     const address = server.server.address();
     const addressStr = typeof address === 'string'
-        ? address
-        : `${address.address}:${address.port}`;
+      ? address
+      : `${address.address}:${address.port}`;
 
     server.log.warn(`Server now listening on: ${addressStr}`);
 

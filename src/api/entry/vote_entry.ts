@@ -25,7 +25,14 @@ type ReqBody = {
 export function routeVoteOnEntry(server: FastifyInstance) {
   const collection = server.mongo.db.collection('entries');
 
-  server.post('/entry/:entryId/vote', {}, async (req: FastifyRequest, res: FastifyReply) => {
+  server.post('/entry/:entryId/vote', {
+    config: {
+      rateLimit: {
+        max: 10,
+        timeWindow: 1000
+      }
+    }
+  }, async (req: FastifyRequest, res: FastifyReply) => {
 
     const { entryId: _entryId } = req.params as Params;
     const entryId = parseInt(_entryId);

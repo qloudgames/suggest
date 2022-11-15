@@ -8,6 +8,7 @@ import * as classNames from 'classnames';
 import { ApiService } from './services/api_service';
 import { calculateVoteCountChange, getTimeElapsedText } from 'common/util';
 import { TagsList } from './tags_list';
+import { ReportModal } from './report_modal';
 
 type Props = {
   entry: EntryData;
@@ -20,7 +21,7 @@ type Props = {
 export const Entry = ({ entry, apiService, compact = true, enableLinks, displayTags = true }: Props) => {
   const [voteState, setVoteState] = React.useState<VoteState>(entry.voteState);
   const [voteCount, setVoteCount] = React.useState<number>(entry.voteCount);
-
+  const [isReportingVisible, setIsReportingVisible] = React.useState<boolean>(false);
   // hack to fix issue with:
   // - changing vote state on 'details' page, then flicking back to listview, would result in outdated votestate
   //   on listview
@@ -47,14 +48,22 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks, displayT
     setVoteCount(entry.voteCount);
   };
 
+  const showReport = () => {
+    setIsReportingVisible(true);
+  }
+
+  const hideReport = () => {
+    setIsReportingVisible(false);
+  }
+
   return (
     <Card.Grid key={entry.id} title={entry.title} className={classNames(styles.entry, { [styles.compact]: compact })}>
 
       <Vote state={voteState} voteCount={voteCount} onLike={() => onVote('like')} onDislike={() => onVote('dislike')}/>
 
       {/* Main area */}
-      <div className={styles.entryContent}>
-        
+      <div className={styles.entryContent} onMouseEnter={showReport} onMouseLeave={hideReport}>
+        <div>
         <div className={styles.entryMain}>
           <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>
             <div className={styles.title}>
@@ -74,6 +83,12 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks, displayT
           <InlineSeparator/>
           <StyledLink to={`/details/${entry.id}`} enabled={enableLinks}>{entry.numComments} comment{entry.numComments !== 1 && 's'}</StyledLink>
         </div>
+        </div>
+        {isReportingVisible ? <div>
+          <ReportModal 
+            entryId={entry.id} 
+          />
+        </div> : null}
       </div>
 
     </Card.Grid>

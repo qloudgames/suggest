@@ -10,5 +10,6 @@
     "jsx": "react",
     "allowJs": false,
     "moduleResolution": "node",
+    "esModuleInterop": true
   },
 }

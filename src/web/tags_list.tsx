@@ -3,7 +3,7 @@ import * as React from 'react';
 import { PlusOutlined, RedoOutlined } from '@ant-design/icons';
 import styles from './tags_list.module.css';
 import { AllTags, getColorForTag, TagType } from 'common/tags';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 
 type Props = {
   mode: 'view' | 'edit' | 'search';

@@ -1,19 +1,21 @@
-import { FastifyRateLimitOptions, FastifyRateLimitStore } from "@fastify/rate-limit";
+import { FastifyRateLimitStore, RateLimitOptions, RateLimitPluginOptions } from "@fastify/rate-limit";
 import { RouteOptions } from "fastify";
+import ms from "ms";
 
 class RequestLookupStore implements FastifyRateLimitStore {
 
-  private options: { [key: string]: any }
+  private options: RateLimitOptions
   private current: number;
 
-  constructor(options: FastifyRateLimitOptions) {
+  constructor(options: RateLimitOptions) {
     this.options = options;
     this.current = 0;
   }
 
   // request counter
   incr = (key: string, callback: (err: Error | null, result?: { current: number; ttl: number }) => void): void => {
-    const timeWindow = this.options.timeWindow;
+    let timeWindow = this.options.timeWindow;
+    if (typeof timeWindow === "string") timeWindow = ms(timeWindow);
     this.current++
     callback(null, { current: this.current, ttl: timeWindow - (this.current * 1000) })
   }
@@ -31,4 +33,12 @@ class RequestLookupStore implements FastifyRateLimitStore {
   }
 }
 
-export { RequestLookupStore }
+interface IOptions extends RateLimitOptions, RateLimitPluginOptions { }
+
+export const rateLimitOptions: IOptions = {
+  global: false, // not setting it on all requests
+  max: 10,
+  ban: 2, // since ban doesn't work well with distributed system, we'll probably need a update our lookup system for this
+  timeWindow: 1000 * 60, // 1 minute 
+  store: RequestLookupStore
+}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Tooltip } from 'antd';
 import styles from './vote.module.css';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { VoteState } from 'common/types';
 
 type Props = {

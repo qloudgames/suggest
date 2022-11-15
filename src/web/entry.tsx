@@ -4,7 +4,7 @@ import styles from './entry.module.css';
 import { EntryData, VoteState } from 'common/types';
 import { InlineSeparator, StyledLink } from './component_util';
 import { Vote } from './vote';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { ApiService } from './services/api_service';
 import { calculateVoteCountChange, getTimeElapsedText } from 'common/util';
 import { TagsList } from './tags_list';

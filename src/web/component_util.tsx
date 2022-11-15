@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './component_util.module.css';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { PageHeader, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 

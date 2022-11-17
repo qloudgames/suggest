@@ -1,4 +1,5 @@
 import { Bounds } from 'common/bounds';
+import { ReportReasons } from 'common/reporting';
 import { AllTags, MaxTagsPerEntry, TagType } from 'common/tags';
 
 export function isValidEntryTitle(title: string) {
@@ -19,4 +20,12 @@ export function isValidEntryTags(tags: TagType[]) {
 
 export function isValidComment(comment: string) {
   return typeof comment === 'string' && comment.length <= Bounds.comment.max && comment.length >= Bounds.comment.min;
+}
+
+export function isValidReasons(reasons: string[]) {
+  return Array.isArray(reasons) && reasons.some((reason) => Object.values(ReportReasons).includes(reason as ReportReasons));
+}
+
+export function isValidIssue(issue: string) {
+  return typeof issue === 'string' && issue.length <= Bounds.issue.max;
 }

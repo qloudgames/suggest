@@ -1,4 +1,4 @@
-import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, FullEntryData, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, FullEntryData, ReportEntryRequest, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 
 export type ApiService = {
 
@@ -17,4 +17,8 @@ export type ApiService = {
   getLocalName(): string;
 
   setLocalName(name: string): void;
+
+  reportEntry(req: ReportEntryRequest): Promise<void>;
+
+  getReportedEntry(): number[] | null;
 };

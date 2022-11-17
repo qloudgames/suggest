@@ -2,30 +2,43 @@ import { Button, Checkbox, Modal } from 'antd';
 import * as React from 'react';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import { ReportReasons } from 'common/reporting';
+import { ReportEntryRequest } from 'common/types';
+import { ApiService } from './services/api_service';
 
 type Props = {
   entryId: number
+  apiService: ApiService
 }
 
-export const ReportModal = ({entryId}: Props) => {
+export const ReportModal = ({entryId, apiService}: Props) => {
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
-  const [reasons, setReasons] = React.useState<CheckboxValueType[]>([]);
+  const [reasons, setReasons] = React.useState<string[]>([]);
   const [issueDescription, setIssueDescription] = React.useState<string>("");
+
+  React.useEffect(() => {
+    return () => {
+      if (!isModalOpen) {
+        setReasons([]);
+        setIssueDescription("");
+      }
+    }
+  }, [isModalOpen])
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    const payload = {
+  const handleOk = async () => {
+    const payload: ReportEntryRequest = {
       entryId,
       reportedOn: Date.now(),
       reasons,
       issue: issueDescription
     }
 
-    console.log(payload) // store this payload to 
+    await apiService.reportEntry(payload);
+
     setIsModalOpen(false);
   };
 
@@ -33,21 +46,19 @@ export const ReportModal = ({entryId}: Props) => {
     setIsModalOpen(false);
   };
 
-  const handleChange = (checkedValues: CheckboxValueType[]) => {
+  const handleChange = (checkedValues: string[]) => {
     setReasons(checkedValues);
   };
 
   const handleIssueDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.target;
-
     setIssueDescription(value);
   }
 
   const reportReasons = [
-    { label: 'It does not follow the community guidelines.', value: 'It does not follow the community guidelines.' },
-    { label: 'I find it offensive or inappropriate', value: 'I find it offensive or inappropriate' },
-    { label: 'It\'s scam or misleading', value: 'I find it offensive' },
-    { label: 'It refers to a political candidate or issue', value: 'It refers to a political candidate or issue' },
+    { label: 'It does not follow the community guidelines.', value: ReportReasons.GUIDELINES },
+    { label: 'I find it offensive or inappropriate', value: ReportReasons.OFFENSIVE },
+    { label: 'It\'s scam or misleading', value: ReportReasons.SCAM },
   ]
 
   return (

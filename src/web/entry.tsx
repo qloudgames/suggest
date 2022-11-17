@@ -87,6 +87,7 @@ export const Entry = ({ entry, apiService, compact = true, enableLinks, displayT
         {isReportingVisible ? <div>
           <ReportModal 
             entryId={entry.id} 
+            apiService={apiService}
           />
         </div> : null}
       </div>

@@ -16,4 +16,7 @@ export const Bounds = {
     min: 10,
     max: 1000,
   },
+  issue: {
+    max: 1000,
+  },
 };

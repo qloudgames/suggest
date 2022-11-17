@@ -1,4 +1,4 @@
-import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
+import { AddCommentRequest, AddEntryRequest, AddEntryResponse, Category, EntryData, EntryDataFromServer, FullEntryData, FullEntryDataFromServer, ReportEntryRequest, VoteOnCommentRequest, VoteOnEntryRequest } from 'common/types';
 import { ApiService } from './api_service';
 import { LocalStorageService } from './local_storage_service';
 
@@ -9,10 +9,10 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     top: { entries?: EntryData[], lastTimestamp: number },
     new: { entries?: EntryData[], lastTimestamp: number },
   } = {
-    hot: { lastTimestamp: 0 },
-    top: { lastTimestamp: 0 },
-    new: { lastTimestamp: 0 },
-  };
+      hot: { lastTimestamp: 0 },
+      top: { lastTimestamp: 0 },
+      new: { lastTimestamp: 0 },
+    };
 
   constructor(private readonly baseUrl: string) {
     super();
@@ -97,7 +97,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     if (res.status !== 200) {
       throw Error(`failed to vote on entry, status came back as: ${res.status}`);
     }
-    
+
     this.updateVoteStateForEntry(req.id, req.toVoteState);
 
     this.clearAllEntriesCaches();
@@ -114,7 +114,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
     if (res.status !== 200) {
       throw Error(`failed to vote on comment, status came back as: ${res.status}`);
     }
-    
+
     this.updateVoteStateForComment(req.entryId, req.commentId, req.toVoteState !== 'none' ? req.toVoteState : undefined);
   }
 
@@ -126,4 +126,19 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       new: { lastTimestamp: 0 },
     };
   }
+
+  async reportEntry(req: ReportEntryRequest): Promise<void> {
+    const res = await fetch(`${this.baseUrl}/entry/${req.entryId}/report`, {
+      method: 'post',
+      body: JSON.stringify({
+        ...req
+      })
+    });
+    if (res.status !== 200) {
+      throw Error(`failed to report the entry, status came back as: ${res.status}`);
+    }
+
+    this.setReportedEntry(req.entryId);
+  }
+
 }

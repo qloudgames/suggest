@@ -16,6 +16,7 @@
   width: 100%;
   justify-content: space-between;
 }
+
 .entry:first-child {
   margin-top: 0;
 }

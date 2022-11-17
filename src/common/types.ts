@@ -67,3 +67,10 @@ export type VoteOnCommentRequest = {
   fromVoteState: VoteState;
   toVoteState: VoteState;
 };
+
+export type ReportEntryRequest = {
+  entryId: number,
+  reportedOn: number,
+  reasons: string[],
+  issue: string
+}

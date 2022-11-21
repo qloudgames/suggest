@@ -47,7 +47,7 @@ export class LocalStorageService {
     this.storage.setItem('local_name', name);
   }
 
-  setReportedEntry(entryId: number): void {
+  setReportedEntries(entryId: number): void {
     let reportedPosts: number[] | null = JSON.parse(this.storage.getItem(`loftia__reported_posts`));
     if (reportedPosts) {
       reportedPosts.push(entryId);
@@ -57,7 +57,7 @@ export class LocalStorageService {
     this.storage.setItem(`loftia__reported_posts`, JSON.stringify(reportedPosts));
   }
 
-  getReportedEntry(): number[] | null {
+  getReportedEntries(): number[] | null {
     return JSON.parse(this.storage.getItem(`loftia__reported_posts`));
   }
 }

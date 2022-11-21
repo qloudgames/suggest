@@ -1,6 +1,5 @@
 import { ReportEntryRequest } from 'common/types';
 import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
-import { v4 } from 'uuid';
 import { isValidIssue, isValidReasons } from '../validation';
 
 const opts: RouteShorthandOptions = {
@@ -26,17 +25,14 @@ export function routeReportEntry(server: FastifyInstance) {
       return;
     }
 
-    const reportID = v4();
-
     const document: ReportEntryRequest = {
       entryId,
       reportedOn,
       reasons,
       issue
     };
-    collection.insertOne({
+    const { insertedId: reportID } = await collection.insertOne({
       ...document,
-      id: reportID,
     });
 
     return JSON.stringify({ reportID });

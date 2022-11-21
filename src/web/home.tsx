@@ -43,7 +43,7 @@ export const Home = ({ state, apiService, onMount, onCategoryChange, onSearchTag
 
   const entries = state.entries[state.selectedCategory]
     ?.filter(entry => satisfiesTagFilter(entry.tags, tags))
-    ?.filter(filteredEntry => !(apiService.getReportedEntry()?.includes(filteredEntry.id)))
+    ?.filter(filteredEntry => !(apiService.getReportedEntries()?.includes(filteredEntry.id)))
 
   return (
     <>

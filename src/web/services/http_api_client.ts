@@ -138,7 +138,7 @@ export class HttpApiClient extends LocalStorageService implements ApiService {
       throw Error(`failed to report the entry, status came back as: ${res.status}`);
     }
 
-    this.setReportedEntry(req.entryId);
+    this.setReportedEntries(req.entryId);
   }
 
 }

@@ -20,5 +20,5 @@ export type ApiService = {
 
   reportEntry(req: ReportEntryRequest): Promise<void>;
 
-  getReportedEntry(): number[] | null;
+  getReportedEntries(): number[] | null;
 };
